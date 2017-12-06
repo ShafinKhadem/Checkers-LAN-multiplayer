@@ -17,6 +17,4 @@ Our term project of Level 1 term 2 Network checkers
 
 # Useful links
 - https://www.coolmath-games.com/0-checkers
-- https://github.com/joeyespo/checkers
 - https://github.com/MKotlik/versa-checkers
-- https://github.com/JakeThurman/Checkers
