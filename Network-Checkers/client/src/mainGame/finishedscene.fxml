@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0"
+      prefWidth="320.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="mainGame.Finishedscene">
+    <Text fx:id="result" layoutX="70.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0">
+        <font>
+            <Font size="30.0"/>
+        </font>
+    </Text>
+    <Button layoutX="67.0" layoutY="128.0" mnemonicParsing="false" onAction="#cntn" text="Continue"/>
+    <Button layoutX="173.0" layoutY="128.0" mnemonicParsing="false" onAction="#rstrt" text="Restart"/>
+</Pane>

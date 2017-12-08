@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="347.0"
+      prefWidth="404.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+    <Label alignment="CENTER" layoutX="13.0" layoutY="13.0" prefHeight="323.0" prefWidth="379.0"
+           text="Left click on a cell to select it. If the cell is valid to be selected then it's border will be green. If there is a valid destination, click there to move selected piece there. Whoever will eat all of the opponent pieces first will win. Pieces can only move diagonally at one distance. But if in a diagonal the next cell is occupied by opponent's piece but the second next cell is free, then one can jump over opponent piece and the opponent piece gets eaten. After a jump, if another jump is available for that piece, it must make that jump and go on like this. Normal pieces can only move towards opponent's direction. If any piece can reach opponent's base row then it becomes a king. A king can also move to own home direction. A player can't skip his move."
+           wrapText="true"/>
+</Pane>
