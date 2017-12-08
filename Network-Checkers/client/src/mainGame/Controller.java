@@ -12,12 +12,12 @@ public class Controller {
 	
 	@FXML
 	void help(ActionEvent event) {
-		gameMain.showhelp ();
+		GameMain.showhelp ();
 	}
 	
 	@FXML
 	void surrender(ActionEvent event){
-		gameMain.finish ();
+		GameMain.finish ();
 	}
 	
 	@FXML

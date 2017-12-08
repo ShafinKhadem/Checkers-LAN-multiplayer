@@ -11,8 +11,8 @@ public class Finishedscene {
 	
 	@FXML
 	void cntn(ActionEvent event) {
-		gameMain.reset ();
-		gameMain.dialog.hide ();
+		GameMain.reset ();
+		GameMain.dialog.hide ();
 	}
 	
 	@FXML

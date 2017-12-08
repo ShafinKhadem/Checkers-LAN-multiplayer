@@ -20,7 +20,7 @@ import java.io.IOException;
  * @author Nafiur Rahman Khadem
  */
 
-public class gameMain extends Application {
+public class GameMain extends Application {
 	//<editor-fold defaultstate="collapsed" desc="public static objects">
 	public static Stage game_window, dialog;
 	public static Scene game_scene, scene;
@@ -40,13 +40,17 @@ public class gameMain extends Application {
 	//</editor-fold>
 	
 	//<editor-fold defaultstate="collapsed" desc="Surely done I think">
-	private static byte next = RED;
+	private static byte next = RED, this_player = RED;
 	private static byte redPieces = 12, bluePieces = 12;
 	private static byte dircol[]={1, -1, 1, -1}, dirrow[] = {-1, -1, 1, 1};
 	private static boolean selected = false;
 	
+	public GameMain (byte player) {
+		this_player = player;
+	}
+	
 	private static void set_scene (Stage window, String sceneFile) throws IOException {
-		Parent parent = FXMLLoader.load (gameMain.class.getResource (sceneFile));
+		Parent parent = FXMLLoader.load (GameMain.class.getResource (sceneFile));
 		scene = new Scene (parent);
 		window.setScene (scene);
 	}
@@ -211,7 +215,7 @@ public class gameMain extends Application {
 				}
 			} else if (next == BLUE) {
 				redPieces--;
-				if (redPieces == 11) {
+				if (redPieces == 0) {
 					changenext ();
 					finish ();
 				}
@@ -226,11 +230,21 @@ public class gameMain extends Application {
 	
 	@Override
 	public void start (Stage primaryStage) throws Exception {
+		checker_images[RED] = red_piece;
+		checker_images[BLUE] = blue_piece;
+		checker_images[RED_KING] = red_king;
+		checker_images[BLUE_KING] = blue_king;
+		next = this_player;
 		game_window = primaryStage;
 		Parent root = FXMLLoader.load (getClass ().getResource ("mainscene.fxml"));
 		game_scene = new Scene (root);
 		turn_text = (Text) game_scene.lookup ("#turn");
-		turn_text.setText ("Red's turn");
+		if (next==RED) {
+			turn_text.setText ("Red's turn");
+		}
+		else if (next == BLUE) {
+			turn_text.setText ("Blue's turn");
+		}
 		checkerboard = (GridPane) game_scene.lookup ("#checkerBoard");
 		for (byte col = 0; col<8; col++) {
 			for (byte row = 0; row<8; row++) {
@@ -269,10 +283,6 @@ public class gameMain extends Application {
 	}
 	
 	public static void main (String[] args) {
-		checker_images[RED] = red_piece;
-		checker_images[BLUE] = blue_piece;
-		checker_images[RED_KING] = red_king;
-		checker_images[BLUE_KING] = blue_king;
 		launch (args);
 	}
 }
