@@ -1,6 +1,8 @@
 package mainGame;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -9,12 +11,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.StringTokenizer;
 
 /**
  * @author Nafiur Rahman Khadem
@@ -38,6 +45,11 @@ public class GameMain extends Application {
 	public static final Image red_king = new Image ("images/red_king.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
 	public static final Image blue_king = new Image ("images/blue_king.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
 	//</editor-fold>
+
+	ObjectInputStream in;
+	ObjectOutputStream out;
+	int itsIndex;
+	boolean singlePlayer = false;
 	
 	//<editor-fold defaultstate="collapsed" desc="Surely done I think">
 	private static byte next = RED, this_player = RED;
@@ -96,6 +108,8 @@ public class GameMain extends Application {
 	}
 	
 	static void reset () {
+		redPieces = 12;
+		bluePieces = 12;
 		if (selected) {
 			grid[selectedRow][selectedCol].getChildren ().remove (2);
 		}
@@ -163,7 +177,7 @@ public class GameMain extends Application {
 			strt = 2;
 			nd = 4;
 		}
-		boolean flg = false;
+		boolean flg_jmp = false;
 		for (byte i = strt; i<nd; i++) {
 			byte trgtrow = (byte) (row+dirrow[i]), trgtcol = (byte) (col+dircol[i]), trgtstt;
 			if (!valid_index (trgtrow, trgtcol)) {
@@ -179,17 +193,17 @@ public class GameMain extends Application {
 				if (vld_jmp) {
 					if ((stt == BLUE || stt == BLUE_KING) && (trgtstt == RED || trgtstt==RED_KING)) {
 						valid_to[trgtrow2][trgtcol2] = JUMP;
-						flg = true;
+						flg_jmp = true;
 					} else if ((stt == RED || stt == RED_KING) && (trgtstt == BLUE || trgtstt==BLUE_KING)) {
 						valid_to[trgtrow2][trgtcol2] = JUMP;
-						flg = true;
+						flg_jmp = true;
 					}
 				}
 			}
 		}
-		if (jumpOnly && !flg) {
+		if (jumpOnly && !flg_jmp) {
 			changenext ();
-		} 
+		}
 	}
 	
 	private void move (byte toRow, byte toCol) {
@@ -228,13 +242,34 @@ public class GameMain extends Application {
 		}
 	}
 	
+	private void click(byte _row, byte _col){
+		if (selected) {
+			if (valid_to[_row][_col] != NONE) {
+				move (_row, _col);
+			}
+			else if (state[_row][_col] == state[selectedRow][selectedCol] || state[_row][_col] == state[selectedRow][selectedCol]+2) {
+				grid[selectedRow][selectedCol].getChildren ().remove (2);
+				select_cell (_row, _col);
+				reset_validTo ();
+				set_valids (_row, _col, false);
+			}
+		}
+		else {
+			if (state[_row][_col] == next || state[_row][_col]==next+2) {
+				select_cell (_row, _col);
+				reset_validTo ();
+				set_valids (_row, _col, false);
+			}
+		}
+	}
+	
 	@Override
 	public void start (Stage primaryStage) throws Exception {
 		checker_images[RED] = red_piece;
 		checker_images[BLUE] = blue_piece;
 		checker_images[RED_KING] = red_king;
 		checker_images[BLUE_KING] = blue_king;
-		next = this_player;
+		next = RED;
 		game_window = primaryStage;
 		Parent root = FXMLLoader.load (getClass ().getResource ("mainscene.fxml"));
 		game_scene = new Scene (root);
@@ -251,25 +286,16 @@ public class GameMain extends Application {
 				final byte _col = col, _row = row;
 				grid[row][col] = new StackPane (new Rectangle (60, 60, ((row+col)&1) != 0 ? Color.BLACK : Color.WHITE));
 				grid[row][col].setOnMouseClicked (event -> {
-					System.out.println (_row+" "+_col+" "+valid_to[_row][_col]+" "+next+" "+state[_row][_col]);
-					
-					if (selected) {
-						if (valid_to[_row][_col] != NONE) {
-							move (_row, _col);
+					if (next == this_player || next == this_player+2 || singlePlayer) {
+						System.out.println (_row+" "+_col+" "+valid_to[_row][_col]+" "+next+" "+state[_row][_col]);
+						if (!singlePlayer) {
+							try {
+								out.writeObject (Byte.toString (_row)+" "+Byte.toString (_col)+" "+Integer.toString (itsIndex));
+							} catch (IOException e) {
+								System.out.println ("sending to server error");
+							}
 						}
-						else if (state[_row][_col] == state[selectedRow][selectedCol] || state[_row][_col] == state[selectedRow][selectedCol]+2) {
-							grid[selectedRow][selectedCol].getChildren ().remove (2);
-							select_cell (_row, _col);
-							reset_validTo ();
-							set_valids (_row, _col, false);
-						}
-					}
-					else {
-						if (state[_row][_col] == next || state[_row][_col]==next+2) {
-							select_cell (_row, _col);
-							reset_validTo ();
-							set_valids (_row, _col, false);
-						}
+						click (_row, _col);
 					}
 				});
 				checkerboard.add (grid[row][col], col, row);
@@ -280,6 +306,61 @@ public class GameMain extends Application {
 		game_window.setTitle ("Multiplayer Checkers");
 		game_window.setScene (game_scene);
 		game_window.show ();
+		Thread processingThread = new Thread(() -> {
+				/*//plan to make it online
+				just have to send the row and col that is being pressed
+				and to implement offer_draw and surrender have to choose some other way
+				to implement stalemate have to check at every changenext whether this has any valid move or jump
+				 */
+			try {
+				Socket socket = new Socket ("127.0.0.1", 33333);
+				in = new ObjectInputStream (socket.getInputStream());
+				out = new ObjectOutputStream (socket.getOutputStream());
+				out.writeObject ("new client");
+				String s;
+				StringTokenizer st;
+				while (true) {
+					s = (String) in.readObject ();
+					st = new StringTokenizer (s);
+					if (s.startsWith ("index")) {
+						st.nextToken ();
+						itsIndex = Integer.parseInt (st.nextToken ());
+						if ((itsIndex&1)!=0) {
+							this_player = BLUE;
+						}
+						System.out.println (itsIndex+" "+(itsIndex^1));
+					}
+					else {
+						final byte _a = Byte.parseByte (st.nextToken ()), _b = Byte.parseByte (st.nextToken ());
+						System.out.println (_a+" "+_b);
+						Platform.runLater(() -> {
+							click (_a, _b);
+						});
+					}
+				}
+			} catch (Exception e) {
+				System.out.println("Server error" + e.toString());
+				singlePlayer = true;
+			}
+			try {
+				Thread.sleep (500);
+			} catch (InterruptedException e) {
+				System.out.println ("Server's data processingThread is interrepted");
+			}
+			try {
+				if (!singlePlayer) {
+					in.close ();
+				}
+			} catch (IOException e) {
+				System.out.println ("socket's input or output stream couldn't be closed");
+			}
+		});
+		processingThread.setDaemon (true);
+		processingThread.start ();
+		if (singlePlayer) {
+			processingThread.interrupt ();
+		}
+		primaryStage.setOnCloseRequest(e -> System.exit(1));
 	}
 	
 	public static void main (String[] args) {
