@@ -7,7 +7,7 @@ public class ServerGui extends Application {
 	
 	@Override
 	public void start (Stage primaryStage) throws Exception {
-		new TestServer ();
+		new Server ();
 	}
 	
 	public static void main (String[] args) {
