@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0"
-      prefWidth="320.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="mainGame.Finishedscene">
-    <Text fx:id="result" layoutX="70.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainGame.Finishedscene">
+    <Text fx:id="result" layoutX="55.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="200.0">
         <font>
-            <Font size="30.0"/>
+            <Font size="30.0" />
         </font>
     </Text>
-    <Button layoutX="67.0" layoutY="128.0" mnemonicParsing="false" onAction="#cntn" text="Continue"/>
-    <Button layoutX="173.0" layoutY="128.0" mnemonicParsing="false" onAction="#rstrt" text="Restart"/>
+    <Button layoutX="115.0" layoutY="127.0" mnemonicParsing="false" onAction="#rstrt" text="New game" />
 </Pane>

@@ -16,7 +16,7 @@
     <MenuBar VBox.vgrow="NEVER">
         <Menu mnemonicParsing="false" text="Options">
             <MenuItem mnemonicParsing="false" onAction="#surrender" text="Surrender" />
-            <MenuItem mnemonicParsing="false" onAction="#offerdraw" text="Offer draw" />
+            <!--<MenuItem mnemonicParsing="false" onAction="#offerdraw" text="Offer draw" />-->
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" onAction="#help" text="Help" />
         </Menu>

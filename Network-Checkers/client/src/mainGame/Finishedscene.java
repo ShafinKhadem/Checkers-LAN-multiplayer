@@ -10,13 +10,8 @@ public class Finishedscene {
 	public Text result;
 	
 	@FXML
-	void cntn(ActionEvent event) {
+	void rstrt(ActionEvent event) {
 		GameMain.reset ();
 		GameMain.dialog.hide ();
-	}
-	
-	@FXML
-	void rstrt(ActionEvent event) {
-		//ClientMain.reset ();
 	}
 }

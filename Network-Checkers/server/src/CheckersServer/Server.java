@@ -19,35 +19,36 @@ public class Server {
 				nc=new NetworkUtil(clientSock);
 				final NetworkUtil _nc = nc;
 				new Thread (() -> {
-					try {
-						while (true) {
-							String s = (String) _nc.read ();
-							System.out.println (s);
-							/*if (s == null) {
-								break;
-							}*/
-							if (s.equals ("new client")) {
-								ncs.add (_nc);
-								_nc.write ("index"+" "+(ncs.size ()-1));
-							}
-							else {
-								String[] os = s.split (" ");
-								int index = Integer.parseInt (os[2]);
-								NetworkUtil i = ncs.get (index^1);
-								i.write (s);
-								System.out.println (index^1);
-								//temporary solution as zodi majhe keu disconnect kore tahole shesh
-								//have to implement waiting for opponenent and handle previous line
-							}
+					while (true) {
+						String s = (String) _nc.read ();
+						System.out.println (s);
+						if (s == null) {
+							//send surrender as he has disconnected
+							//but ke disconnect hoise ta bojhar way ki?
+							break;
 						}
-					} catch (Exception e) {
-						System.out.println (e);
+						if (s.equals ("new client")) {
+							ncs.add (_nc);
+							_nc.write ("index"+" "+(ncs.size ()-1));
+						}
+						else {
+							String[] os = s.split (" ");
+							int index = Integer.parseInt (os[2]);
+							NetworkUtil nu = ncs.get (index^1);
+							nu.write (s);
+							System.out.println (index^1);
+							//have to implement waiting for opponenent
+							//when opponent disconnects see if s==null
+							//to implement New game I think we should send the new client message only
+							//let's ignore offer draw now.
+						}
 					}
 					try {
-						Thread.sleep (200);
+						Thread.sleep (100);
 					} catch (InterruptedException e) {
 						e.printStackTrace ();
 					}
+					_nc.closeConnection ();
 				}).start ();
 			}
 		}catch(Exception e) {

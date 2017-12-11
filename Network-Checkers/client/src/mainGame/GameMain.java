@@ -2,7 +2,6 @@ package mainGame;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,15 +10,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.StringTokenizer;
 
@@ -44,12 +40,12 @@ public class GameMain extends Application {
 	public static final Image blue_piece = new Image ("images/blue_piece.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
 	public static final Image red_king = new Image ("images/red_king.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
 	public static final Image blue_king = new Image ("images/blue_king.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
+	public static ObjectInputStream in_server;
+	public static ObjectOutputStream out_server;
+	public static int itsIndex;
+	public static boolean singlePlayer = false;
 	//</editor-fold>
 
-	ObjectInputStream in;
-	ObjectOutputStream out;
-	int itsIndex;
-	boolean singlePlayer = false;
 	
 	//<editor-fold defaultstate="collapsed" desc="Surely done I think">
 	private static byte next = RED, this_player = RED;
@@ -67,7 +63,7 @@ public class GameMain extends Application {
 		window.setScene (scene);
 	}
 	
-	static void showhelp () {
+	static void showHelp () {
 		dialog = new Stage ();
 		dialog.initModality (Modality.NONE);
 		dialog.initOwner (game_window);
@@ -79,7 +75,18 @@ public class GameMain extends Application {
 		dialog.show ();
 	}
 	
-	static void finish () {
+	private static void changeNext(){
+		if (next == RED) {
+			next = BLUE;
+			turn_text.setText ("Blue's turn");
+		}
+		else if (next==BLUE) {
+			next = RED;
+			turn_text.setText ("Red's turn");
+		}
+	}
+	
+	private static void finish () {
 		dialog = new Stage();
 		dialog.initModality(Modality.APPLICATION_MODAL);
 		dialog.initOwner(game_window);
@@ -101,6 +108,20 @@ public class GameMain extends Application {
 			e.printStackTrace ();
 		}
 		dialog.show();
+	}
+	
+	
+	static void surrender () {
+		if (!singlePlayer) {
+			try {
+				out_server.writeObject ("surrender this"+" "+itsIndex);
+			} catch (IOException e) {
+				e.printStackTrace ();
+			}
+			next = this_player;
+			finish ();
+		}
+		else finish ();
 	}
 	
 	private static void add_piece (byte row, byte col, byte state) {
@@ -131,17 +152,6 @@ public class GameMain extends Application {
 					}
 				}
 			}
-		}
-	}
-	
-	private void changenext(){
-		if (next == RED) {
-			next = BLUE;
-			turn_text.setText ("Blue's turn");
-		}
-		else if (next==BLUE) {
-			next = RED;
-			turn_text.setText ("Red's turn");
 		}
 	}
 	
@@ -202,11 +212,12 @@ public class GameMain extends Application {
 			}
 		}
 		if (jumpOnly && !flg_jmp) {
-			changenext ();
+			changeNext ();
 		}
 	}
 	
 	private void move (byte toRow, byte toCol) {
+/*to implement stalemate have to check at every changeNext whether this has any valid move or jump*/
 		grid[selectedRow][selectedCol].getChildren ().remove (1, 3);
 		if (state[selectedRow][selectedCol] == RED && toRow == 0) {
 			state[selectedRow][selectedCol] = RED_KING;
@@ -224,13 +235,13 @@ public class GameMain extends Application {
 			if (next == RED) {
 				bluePieces--;
 				if (bluePieces == 0) {
-					changenext ();
+					changeNext ();
 					finish ();
 				}
 			} else if (next == BLUE) {
 				redPieces--;
 				if (redPieces == 0) {
-					changenext ();
+					changeNext ();
 					finish ();
 				}
 			}
@@ -238,7 +249,7 @@ public class GameMain extends Application {
 			set_valids (toRow, toCol, true);
 		}
 		else {
-			changenext ();
+			changeNext ();
 		}
 	}
 	
@@ -290,7 +301,7 @@ public class GameMain extends Application {
 						System.out.println (_row+" "+_col+" "+valid_to[_row][_col]+" "+next+" "+state[_row][_col]);
 						if (!singlePlayer) {
 							try {
-								out.writeObject (Byte.toString (_row)+" "+Byte.toString (_col)+" "+Integer.toString (itsIndex));
+								out_server.writeObject (Byte.toString (_row)+" "+Byte.toString (_col)+" "+Integer.toString (itsIndex));
 							} catch (IOException e) {
 								System.out.println ("sending to server error");
 							}
@@ -307,20 +318,15 @@ public class GameMain extends Application {
 		game_window.setScene (game_scene);
 		game_window.show ();
 		Thread processingThread = new Thread(() -> {
-				/*//plan to make it online
-				just have to send the row and col that is being pressed
-				and to implement offer_draw and surrender have to choose some other way
-				to implement stalemate have to check at every changenext whether this has any valid move or jump
-				 */
 			try {
 				Socket socket = new Socket ("127.0.0.1", 33333);
-				in = new ObjectInputStream (socket.getInputStream());
-				out = new ObjectOutputStream (socket.getOutputStream());
-				out.writeObject ("new client");
+				in_server = new ObjectInputStream (socket.getInputStream());
+				out_server = new ObjectOutputStream (socket.getOutputStream());
+				out_server.writeObject ("new client");
 				String s;
 				StringTokenizer st;
 				while (true) {
-					s = (String) in.readObject ();
+					s = (String) in_server.readObject ();
 					st = new StringTokenizer (s);
 					if (s.startsWith ("index")) {
 						st.nextToken ();
@@ -330,6 +336,14 @@ public class GameMain extends Application {
 						}
 						System.out.println (itsIndex+" "+(itsIndex^1));
 					}
+					else if (s.startsWith ("surrender")) {
+						if (next == this_player) {
+							changeNext ();
+						}
+						Platform.runLater(() -> {
+							finish ();
+						});
+					}
 					else {
 						final byte _a = Byte.parseByte (st.nextToken ()), _b = Byte.parseByte (st.nextToken ());
 						System.out.println (_a+" "+_b);
@@ -337,19 +351,18 @@ public class GameMain extends Application {
 							click (_a, _b);
 						});
 					}
+					Thread.sleep (300);
 				}
+			} catch (InterruptedException e) {
+				System.out.println ("Game's data processingThread is interrepted");
 			} catch (Exception e) {
-				System.out.println("Server error" + e.toString());
+				System.out.println("Game's data processing error" + e.toString());
 				singlePlayer = true;
 			}
 			try {
-				Thread.sleep (500);
-			} catch (InterruptedException e) {
-				System.out.println ("Server's data processingThread is interrepted");
-			}
-			try {
 				if (!singlePlayer) {
-					in.close ();
+					in_server.close ();
+					out_server.close ();
 				}
 			} catch (IOException e) {
 				System.out.println ("socket's input or output stream couldn't be closed");
@@ -360,10 +373,6 @@ public class GameMain extends Application {
 		if (singlePlayer) {
 			processingThread.interrupt ();
 		}
-		primaryStage.setOnCloseRequest(e -> System.exit(1));
-	}
-	
-	public static void main (String[] args) {
-		launch (args);
+//		primaryStage.setOnCloseRequest(e -> System.exit(1));
 	}
 }

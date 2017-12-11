@@ -17,7 +17,7 @@ public class NetworkUtil
 			oos=new ObjectOutputStream(socket.getOutputStream());
 			ois=new ObjectInputStream(socket.getInputStream());
 		} catch (Exception e) {
-			System.out.println("In NetworkUtil : " + e.toString());
+			System.out.println("Exception In constructing NetworkUtil : " + e.toString());
 		}
 	}
 
