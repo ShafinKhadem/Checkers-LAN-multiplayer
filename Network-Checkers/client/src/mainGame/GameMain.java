@@ -309,7 +309,6 @@ public class GameMain extends Application {
 						click (_row, _col);
 					}
 				});
-				checkerboard.add (grid[row][col], col, row);
 				state[row][col] = NONE;
 			}
 		}
@@ -331,10 +330,26 @@ public class GameMain extends Application {
 					if (s.startsWith ("index")) {
 						st.nextToken ();
 						itsIndex = Integer.parseInt (st.nextToken ());
-						if ((itsIndex&1)!=0) {
+						if ((itsIndex&1) != 0) {
 							this_player = BLUE;
+							Platform.runLater (() -> {
+								for (int row = 0; row<8; row++) {
+									for (int col = 0; col<8; col++) {
+										checkerboard.add (grid[row][col], 7-col, 7-row);
+									}
+								}
+							});
 						}
 						System.out.println (itsIndex+" "+(itsIndex^1));
+					}
+					else if (s.equals ("pair done")) {
+						Platform.runLater (() -> {
+							for (int row = 0; row<8; row++) {
+								for (int col = 0; col<8; col++) {
+									checkerboard.add (grid[row][col], col, row);
+								}
+							}
+						});
 					}
 					else if (s.startsWith ("surrender")) {
 						if (next == this_player) {
@@ -358,6 +373,13 @@ public class GameMain extends Application {
 			} catch (Exception e) {
 				System.out.println("Game's data processing error" + e.toString());
 				singlePlayer = true;
+				Platform.runLater (()->{
+					for (int row = 0; row<8; row++) {
+						for (int col = 0; col<8; col++) {
+							checkerboard.add (grid[row][col], col, row);/*else show waiting*/
+						}
+					}
+				});
 			}
 			try {
 				if (!singlePlayer) {

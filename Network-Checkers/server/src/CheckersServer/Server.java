@@ -29,7 +29,12 @@ public class Server {
 						}
 						if (s.equals ("new client")) {
 							ncs.add (_nc);
-							_nc.write ("index"+" "+(ncs.size ()-1));
+							int index = (ncs.size ()-1);
+							_nc.write ("index"+" "+index);
+							if ((index&1) != 0) {
+								NetworkUtil nu = ncs.get (index^1);
+								nu.write ("pair done");
+							}
 						}
 						else {
 							String[] os = s.split (" ");
@@ -37,16 +42,16 @@ public class Server {
 							NetworkUtil nu = ncs.get (index^1);
 							nu.write (s);
 							System.out.println (index^1);
-							//have to implement waiting for opponenent
+							//have to implement red waiting for opponenent
 							//when opponent disconnects see if s==null
 							//to implement New game I think we should send the new client message only
 							//let's ignore offer draw now.
 						}
-					}
-					try {
-						Thread.sleep (100);
-					} catch (InterruptedException e) {
-						e.printStackTrace ();
+						try {
+							Thread.sleep (100);
+						} catch (InterruptedException e) {
+							e.printStackTrace ();
+						}
 					}
 					_nc.closeConnection ();
 				}).start ();
@@ -54,9 +59,5 @@ public class Server {
 		}catch(Exception e) {
 			System.out.println("Server starts:"+e);
 		}
-	}
-	
-	public static void main(String args[]) {
-		Server objServer = new Server ();
 	}
 }
