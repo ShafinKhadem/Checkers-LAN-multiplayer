@@ -163,6 +163,20 @@ public class GameMain extends Application {
 			}
 		}
 	}
+	//</editor-fold>
+	
+	
+	private boolean stalemate () {
+		for (byte i = 0; i<8; i++) {
+			for (byte j = 0; j<8; j++) {
+				//ei protyekta position er konotay zodi or player thake tahole just check kor er kono valid move ase kina
+				if ((state[i][j] == next || state[i][j] == next+2) && set_valids (i, j, false)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 	
 	private void changeNext(){
 		if (next == RED) {
@@ -173,10 +187,12 @@ public class GameMain extends Application {
 			next = RED;
 			turn_text.setText ("Red's turn");
 		}
+		if (stalemate () && (singlePlayer || this_player==next)) {
+			surrender ();
+		} 
 	}
-	//</editor-fold>
 	
-	private void set_valids (byte row, byte col, boolean jumpOnly) {
+	private boolean set_valids (byte row, byte col, boolean jumpOnly) {
 		byte strt = 0, nd = 2, stt = state[row][col];//strt and nd by default (for red)
 		if (stt == RED_KING || stt == BLUE_KING) {
 			nd = 4;
@@ -185,7 +201,7 @@ public class GameMain extends Application {
 			strt = 2;
 			nd = 4;
 		}
-		boolean flg_jmp = false;
+		boolean flg_jmp = false, flg_mv = false;
 		for (byte i = strt; i<nd; i++) {
 			byte trgtrow = (byte) (row+dirrow[i]), trgtcol = (byte) (col+dircol[i]), trgtstt;
 			if (!valid_index (trgtrow, trgtcol)) {
@@ -194,6 +210,7 @@ public class GameMain extends Application {
 			trgtstt = state[trgtrow][trgtcol];
 			if (!jumpOnly && trgtstt == NONE) {
 				valid_to[trgtrow][trgtcol] = MOVE;
+				flg_mv = true;
 			}
 			else {
 				byte trgtrow2 = (byte) (trgtrow+dirrow[i]), trgtcol2 = (byte) (trgtcol+dircol[i]);
@@ -212,6 +229,7 @@ public class GameMain extends Application {
 		if (jumpOnly && !flg_jmp) {
 			changeNext ();
 		}
+		return flg_jmp || flg_mv;
 	}
 	
 	private void move (byte toRow, byte toCol) {
@@ -309,7 +327,7 @@ public class GameMain extends Application {
 		game_window.setTitle ("Multiplayer Checkers");
 		game_window.setScene (game_scene);
 		game_window.show ();
-		Thread processingThread = new Thread(() -> {
+		new Thread(() -> {
 			try {
 				Socket socket = new Socket ("127.0.0.1", 33333);
 				in_server = new ObjectInputStream (socket.getInputStream());
@@ -369,12 +387,16 @@ public class GameMain extends Application {
 				System.out.println("Game's data processing error" + e.toString());
 				singlePlayer = true;
 				Platform.runLater (()->{
+					turn_text.setText ("Red's turn");
 					for (int row = 0; row<8; row++) {
 						for (int col = 0; col<8; col++) {
 							checkerboard.add (grid[row][col], col, row);/*else show waiting*/
 						}
 					}
 				});
+				System.out.println ("No more communicating with server as an offline game");
+				Thread.currentThread ().interrupt ();
+				return;
 			}
 			try {
 				if (!singlePlayer) {
@@ -384,12 +406,7 @@ public class GameMain extends Application {
 			} catch (IOException e) {
 				System.out.println ("socket's input or output stream couldn't be closed");
 			}
-		});
-		processingThread.setDaemon (true);
-		processingThread.start ();
-		if (singlePlayer) {
-			processingThread.interrupt ();
-		}
+		}).start ();
 //		primaryStage.setOnCloseRequest(e -> System.exit(1));
 	}
 }
