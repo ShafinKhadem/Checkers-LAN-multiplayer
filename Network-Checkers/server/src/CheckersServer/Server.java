@@ -5,17 +5,16 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class Server {
-	private ServerSocket ServSock;
 	private ArrayList<NetworkUtil> ncs = new ArrayList<> ();
 //	private int[] itsPair = new int[1000+5];
 	
 	Server () {
 		try {
-			ServSock = new ServerSocket(33333);
+			ServerSocket servSock = new ServerSocket (33333);
 			Socket clientSock;
 			NetworkUtil nc;
 			while (true) {
-				clientSock = ServSock.accept();
+				clientSock = servSock.accept();
 				nc=new NetworkUtil(clientSock);
 				final NetworkUtil _nc = nc;
 				new Thread (() -> {
@@ -23,8 +22,13 @@ public class Server {
 						String s = (String) _nc.read ();
 						System.out.println (s);
 						if (s == null) {
-							//send surrender as he has disconnected
-							//but ke disconnect hoise ta bojhar way ki?
+							int sz = ncs.size ();
+							for (int i = 0; i<sz; i++) {
+								if (ncs.get (i) == _nc) {
+									System.out.println (i);
+									ncs.get (i^1).write ("surrender");
+								}
+							}
 							break;
 						}
 						if (s.equals ("new client")) {
@@ -42,8 +46,6 @@ public class Server {
 							NetworkUtil nu = ncs.get (index^1);
 							nu.write (s);
 							System.out.println (index^1);
-							//have to implement red waiting for opponenent
-							//when opponent disconnects see if s==null
 							//to implement New game I think we should send the new client message only
 							//let's ignore offer draw now.
 						}

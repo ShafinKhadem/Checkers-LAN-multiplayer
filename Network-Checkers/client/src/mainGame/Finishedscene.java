@@ -11,7 +11,7 @@ public class Finishedscene {
 	
 	@FXML
 	void rstrt(ActionEvent event) {
-		GameMain.reset ();
-		GameMain.dialog.hide ();
+		ClientMain.game.reset ();
+		ClientMain.game.dialog.hide ();
 	}
 }

@@ -24,46 +24,44 @@ import java.util.StringTokenizer;
  */
 
 public class GameMain extends Application {
-	//<editor-fold defaultstate="collapsed" desc="public static objects">
-	public static Stage game_window, dialog;
-	public static Scene game_scene, scene;
-	public static Text turn_text;
-	public static GridPane checkerboard;
-	public static final byte GRID_BASEX = 5, GRID_BASEY = 65, GRID_DIMENSION = 60;
-	public static final byte NONE = 0, RED = 1, BLUE = 2, RED_KING = 3, BLUE_KING = 4, MOVE = 5, JUMP = 6;
-	public static StackPane[][] grid = new StackPane[10][10];
-	public static byte[][] state = new byte[10][10];
-	public static byte[][] valid_to = new byte[10][10];//move and jump ke alada korar jonyo
-	public static byte selectedRow, selectedCol;
-	public static Image[] checker_images = new Image[10];
-	public static final Image red_piece = new Image ("images/red_piece.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
-	public static final Image blue_piece = new Image ("images/blue_piece.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
-	public static final Image red_king = new Image ("images/red_king.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
-	public static final Image blue_king = new Image ("images/blue_king.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
-	public static ObjectInputStream in_server;
-	public static ObjectOutputStream out_server;
-	public static int itsIndex;
-	public static boolean singlePlayer = false;
-	//</editor-fold>
-
-	
 	//<editor-fold defaultstate="collapsed" desc="Surely done I think">
-	private static byte next = RED, this_player = RED;
-	private static byte redPieces = 12, bluePieces = 12;
-	private static byte dircol[]={1, -1, 1, -1}, dirrow[] = {-1, -1, 1, 1};
-	private static boolean selected = false;
+	static final byte NONE = 0, RED = 1, BLUE = 2, RED_KING = 3, BLUE_KING = 4, MOVE = 5, JUMP = 6;
+	Stage game_window, dialog;
+	private Scene game_scene, scene;
+	private ObjectInputStream in_server;
+	private ObjectOutputStream out_server;
+	private int itsIndex;
+	private boolean singlePlayer = false;
+	private Text turn_text;
+	private GridPane checkerboard;
+	private final byte GRID_BASEX = 5, GRID_BASEY = 65, GRID_DIMENSION = 60;
+	private StackPane[][] grid = new StackPane[10][10];
+	private byte[][] state = new byte[10][10];
+	private byte[][] valid_to = new byte[10][10];//move and jump ke alada korar jonyo
+	private byte selectedRow, selectedCol;
+	private Image[] checker_images = new Image[10];
+	private final Image red_piece = new Image ("images/red_piece.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
+	private final Image blue_piece = new Image ("images/blue_piece.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
+	private final Image red_king = new Image ("images/red_king.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
+	private final Image blue_king = new Image ("images/blue_king.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
+	private byte next = RED, this_player = RED;
+	private byte redPieces = 12, bluePieces = 12;
+	private byte dircol[]={1, -1, 1, -1}, dirrow[] = {-1, -1, 1, 1};
+	private boolean selected = false;
+	
+	
 	
 	public GameMain (byte player) {
 		this_player = player;
 	}
 	
-	private static void set_scene (Stage window, String sceneFile) throws IOException {
+	private void set_scene (Stage window, String sceneFile) throws IOException {
 		Parent parent = FXMLLoader.load (GameMain.class.getResource (sceneFile));
 		scene = new Scene (parent);
 		window.setScene (scene);
 	}
 	
-	static void showHelp () {
+	void showHelp () {
 		dialog = new Stage ();
 		dialog.initModality (Modality.NONE);
 		dialog.initOwner (game_window);
@@ -75,18 +73,7 @@ public class GameMain extends Application {
 		dialog.show ();
 	}
 	
-	private static void changeNext(){
-		if (next == RED) {
-			next = BLUE;
-			turn_text.setText ("Blue's turn");
-		}
-		else if (next==BLUE) {
-			next = RED;
-			turn_text.setText ("Red's turn");
-		}
-	}
-	
-	private static void finish () {
+	private void finish () {
 		dialog = new Stage();
 		dialog.initModality(Modality.APPLICATION_MODAL);
 		dialog.initOwner(game_window);
@@ -111,7 +98,7 @@ public class GameMain extends Application {
 	}
 	
 	
-	static void surrender () {
+	void surrender () {
 		if (!singlePlayer) {
 			try {
 				out_server.writeObject ("surrender this"+" "+itsIndex);
@@ -124,11 +111,11 @@ public class GameMain extends Application {
 		else finish ();
 	}
 	
-	private static void add_piece (byte row, byte col, byte state) {
+	private void add_piece (byte row, byte col, byte state) {
 		grid[row][col].getChildren ().add (new ImageView (checker_images[state]));
 	}
 	
-	static void reset () {
+	void reset () {
 		redPieces = 12;
 		bluePieces = 12;
 		if (selected) {
@@ -174,6 +161,17 @@ public class GameMain extends Application {
 			for (int j = 0; j<8; j++) {
 				valid_to[i][j] = NONE;
 			}
+		}
+	}
+	
+	private void changeNext(){
+		if (next == RED) {
+			next = BLUE;
+			turn_text.setText ("Blue's turn");
+		}
+		else if (next==BLUE) {
+			next = RED;
+			turn_text.setText ("Red's turn");
 		}
 	}
 	//</editor-fold>
@@ -285,12 +283,7 @@ public class GameMain extends Application {
 		Parent root = FXMLLoader.load (getClass ().getResource ("mainscene.fxml"));
 		game_scene = new Scene (root);
 		turn_text = (Text) game_scene.lookup ("#turn");
-		if (next==RED) {
-			turn_text.setText ("Red's turn");
-		}
-		else if (next == BLUE) {
-			turn_text.setText ("Blue's turn");
-		}
+		turn_text.setText ("Waiting for opponent");
 		checkerboard = (GridPane) game_scene.lookup ("#checkerBoard");
 		for (byte col = 0; col<8; col++) {
 			for (byte row = 0; row<8; row++) {
@@ -333,6 +326,7 @@ public class GameMain extends Application {
 						if ((itsIndex&1) != 0) {
 							this_player = BLUE;
 							Platform.runLater (() -> {
+								turn_text.setText ("Blue's turn");
 								for (int row = 0; row<8; row++) {
 									for (int col = 0; col<8; col++) {
 										checkerboard.add (grid[row][col], 7-col, 7-row);
@@ -344,6 +338,7 @@ public class GameMain extends Application {
 					}
 					else if (s.equals ("pair done")) {
 						Platform.runLater (() -> {
+							turn_text.setText ("Red's turn");
 							for (int row = 0; row<8; row++) {
 								for (int col = 0; col<8; col++) {
 									checkerboard.add (grid[row][col], col, row);
