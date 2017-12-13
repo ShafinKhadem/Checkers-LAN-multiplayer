@@ -3,9 +3,8 @@ Our term project of Level 1 term 2 Network checkers
 
 # Todo list
 - [X] make basic game
-- [ ] implement stalemate
-- [ ] Take the players’ name as input
-- [ ] Process all the requests and make pairs from them, while not finding pair show waiting, first player of the pair is red
+- [X] Process all the requests and make pairs from them
+- [ ] Optional: Take the players’ name as input
 - [ ] Optional: show possible moves
 
 # Useful links
