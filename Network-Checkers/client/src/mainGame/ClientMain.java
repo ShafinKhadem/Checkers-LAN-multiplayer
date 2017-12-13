@@ -11,9 +11,11 @@ public class ClientMain extends Application {
 		launch (args);
 	}
 	public static GameMain game;
+	public static Stage staticStage;
 	
 	@Override
 	public void start (Stage primaryStage) {
+		staticStage = primaryStage;
 		game = new GameMain (RED);
 		try {
 			game.start (primaryStage);

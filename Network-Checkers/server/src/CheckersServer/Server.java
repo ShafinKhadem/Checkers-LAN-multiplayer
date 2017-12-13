@@ -46,7 +46,6 @@ public class Server {
 							NetworkUtil nu = ncs.get (index^1);
 							nu.write (s);
 							System.out.println (index^1);
-							//to implement New game I think we should send the new client message only
 							//let's ignore offer draw now.
 						}
 						try {

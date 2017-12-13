@@ -169,7 +169,6 @@ public class GameMain extends Application {
 	private boolean stalemate () {
 		for (byte i = 0; i<8; i++) {
 			for (byte j = 0; j<8; j++) {
-				//ei protyekta position er konotay zodi or player thake tahole just check kor er kono valid move ase kina
 				if ((state[i][j] == next || state[i][j] == next+2) && set_valids (i, j, false)) {
 					return false;
 				}
@@ -233,7 +232,6 @@ public class GameMain extends Application {
 	}
 	
 	private void move (byte toRow, byte toCol) {
-/*to implement stalemate have to check at every changeNext whether this has any valid move or jump*/
 		grid[selectedRow][selectedCol].getChildren ().remove (1, 3);
 		if (state[selectedRow][selectedCol] == RED && toRow == 0) {
 			state[selectedRow][selectedCol] = RED_KING;
@@ -344,7 +342,7 @@ public class GameMain extends Application {
 						if ((itsIndex&1) != 0) {
 							this_player = BLUE;
 							Platform.runLater (() -> {
-								turn_text.setText ("Blue's turn");
+								turn_text.setText ("Red's turn");
 								for (int row = 0; row<8; row++) {
 									for (int col = 0; col<8; col++) {
 										checkerboard.add (grid[row][col], 7-col, 7-row);
