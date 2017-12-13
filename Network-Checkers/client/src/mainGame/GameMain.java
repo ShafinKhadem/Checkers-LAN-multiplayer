@@ -353,6 +353,7 @@ public class GameMain extends Application {
 						System.out.println (itsIndex+" "+(itsIndex^1));
 					}
 					else if (s.equals ("pair done")) {
+						this_player = RED;
 						Platform.runLater (() -> {
 							turn_text.setText ("Red's turn");
 							for (int row = 0; row<8; row++) {
@@ -405,6 +406,6 @@ public class GameMain extends Application {
 				System.out.println ("socket's input or output stream couldn't be closed");
 			}
 		}).start ();
-//		primaryStage.setOnCloseRequest(e -> System.exit(1));
+		primaryStage.setOnCloseRequest(e -> System.exit(1));
 	}
 }

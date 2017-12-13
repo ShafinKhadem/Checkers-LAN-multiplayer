@@ -4,11 +4,12 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class Server {
+public class Server extends Thread {
 	private ArrayList<NetworkUtil> ncs = new ArrayList<> ();
 //	private int[] itsPair = new int[1000+5];
 	
-	Server () {
+	@Override
+	public void run () {
 		try {
 			ServerSocket servSock = new ServerSocket (33333);
 			Socket clientSock;
@@ -26,7 +27,9 @@ public class Server {
 							for (int i = 0; i<sz; i++) {
 								if (ncs.get (i) == _nc) {
 									System.out.println (i);
-									ncs.get (i^1).write ("surrender");
+									if ((i^1)<sz) {
+										ncs.get (i^1).write ("surrender");
+									}
 								}
 							}
 							break;
@@ -49,13 +52,14 @@ public class Server {
 							//let's ignore offer draw now.
 						}
 						try {
-							Thread.sleep (100);
+							Thread.sleep (300);
 						} catch (InterruptedException e) {
 							e.printStackTrace ();
 						}
 					}
 					_nc.closeConnection ();
 				}).start ();
+				Thread.sleep (500);
 			}
 		}catch(Exception e) {
 			System.out.println("Server starts:"+e);

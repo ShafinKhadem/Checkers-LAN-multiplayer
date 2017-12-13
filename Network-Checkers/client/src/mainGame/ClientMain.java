@@ -18,6 +18,7 @@ public class ClientMain extends Application {
 		staticStage = primaryStage;
 		game = new GameMain (RED);
 		try {
+			game.stop ();
 			game.start (primaryStage);
 		} catch (Exception e) {
 			e.printStackTrace ();
