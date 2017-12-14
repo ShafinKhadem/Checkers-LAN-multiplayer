@@ -24,12 +24,16 @@ public class Server extends Thread {
 						System.out.println (s);
 						if (s == null) {
 							int sz = ncs.size ();
-							for (int i = 0; i<sz; i++) {
+							for (int i = sz-1; i >= 0; i--) {
 								if (ncs.get (i) == _nc) {
-									System.out.println (i);
+									System.out.println ("paisi "+i);
 									if ((i^1)<sz) {
 										ncs.get (i^1).write ("surrender");
 									}
+									else {
+										ncs.remove (i);
+									}
+									break;
 								}
 							}
 							break;
