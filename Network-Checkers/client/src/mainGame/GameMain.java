@@ -14,6 +14,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.*;
 import java.net.Socket;
@@ -25,13 +26,13 @@ import java.util.StringTokenizer;
 
 public class GameMain extends Application {
 	//<editor-fold defaultstate="collapsed" desc="Surely done I think">
-	static final byte NONE = 0, RED = 1, BLUE = 2, RED_KING = 3, BLUE_KING = 4, MOVE = 5, JUMP = 6;
+	static final byte NONE = 0, WHITE = 1, BLACK = 2, WHITE_KING = 3, BLACK_KING = 4, MOVE = 5, JUMP = 6;
 	Stage game_window, dialog;
 	private Scene game_scene, scene;
 	private ObjectInputStream in_server;
 	private ObjectOutputStream out_server;
 	private int itsIndex;
-	private boolean singlePlayer = false;
+	private boolean singlePlayer = false, jumpOnly = false;
 	private Text turn_text;
 	private GridPane checkerboard;
 	private final byte GRID_BASEX = 5, GRID_BASEY = 65, GRID_DIMENSION = 60;
@@ -40,12 +41,14 @@ public class GameMain extends Application {
 	private byte[][] valid_to = new byte[10][10];//move and jump ke alada korar jonyo
 	private byte selectedRow, selectedCol;
 	private Image[] checker_images = new Image[10];
-	private final Image red_piece = new Image ("images/red_piece.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
-	private final Image blue_piece = new Image ("images/blue_piece.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
-	private final Image red_king = new Image ("images/red_king.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
-	private final Image blue_king = new Image ("images/blue_king.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
-	private byte next = RED, this_player = RED;
-	private byte redPieces = 12, bluePieces = 12;
+	private final Image white_piece = new Image ("images/chips_white.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
+	private final Image black_piece = new Image ("images/chips_black.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
+	private final Image white_king = new Image ("images/chips_white_king.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
+	private final Image black_king = new Image ("images/chips_black_king.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
+	private final Image bg_black = new Image ("images/bg_black.png", GRID_DIMENSION, GRID_DIMENSION, false, true, true);
+	private final Image bg_white = new Image ("images/bg_white.png", GRID_DIMENSION, GRID_DIMENSION, false, true, true);
+	private byte next = WHITE, this_player = WHITE;
+	private byte whitePieces = 12, blackPieces = 12;
 	private byte dircol[]={1, -1, 1, -1}, dirrow[] = {-1, -1, 1, 1};
 	private boolean selected = false;
 	
@@ -55,21 +58,21 @@ public class GameMain extends Application {
 		this_player = player;
 	}
 	
-	private void set_scene (Stage window, String sceneFile) throws IOException {
-		Parent parent = FXMLLoader.load (GameMain.class.getResource (sceneFile));
-		scene = new Scene (parent);
-		window.setScene (scene);
+	private void set_scene (Stage window, String sceneFile) {
+		try {
+			scene = new Scene (FXMLLoader.load (GameMain.class.getResource (sceneFile)));
+			window.setScene (scene);
+		} catch (IOException e) {
+			System.out.println ("fxml file could not be loaded");
+			e.printStackTrace (System.out);
+		}
 	}
 	
 	void showHelp () {
 		dialog = new Stage ();
 		dialog.initModality (Modality.NONE);
 		dialog.initOwner (game_window);
-		try {
-			set_scene (dialog, "helpscene.fxml");
-		} catch (IOException e) {
-			e.printStackTrace ();
-		}
+		set_scene (dialog, "helpscene.fxml");
 		dialog.show ();
 	}
 	
@@ -77,23 +80,20 @@ public class GameMain extends Application {
 		dialog = new Stage();
 		dialog.initModality(Modality.APPLICATION_MODAL);
 		dialog.initOwner(game_window);
-		try {
-			set_scene (dialog, "finishedscene.fxml");
-			Text result = (Text) scene.lookup ("#result");
-			if (bluePieces <= 2 && bluePieces==redPieces) {
-				result.setText ("Tie");
+		set_scene (dialog, "finishedscene.fxml");
+		Text result = (Text) scene.lookup ("#result");
+		if (blackPieces <= 2 && blackPieces==whitePieces) {
+			result.setText ("Tie");
+		}
+		else {
+			if (next == WHITE) {
+				result.setText ("Black won");
 			}
 			else {
-				if (next == RED) {
-					result.setText ("Blue won");
-				}
-				else {
-					result.setText ("Red won");
-				}
+				result.setText ("White won");
 			}
-		} catch (IOException e) {
-			e.printStackTrace ();
 		}
+		dialog.initStyle (StageStyle.UNDECORATED);
 		dialog.show();
 	}
 	
@@ -103,7 +103,8 @@ public class GameMain extends Application {
 			try {
 				out_server.writeObject ("surrender this"+" "+itsIndex);
 			} catch (IOException e) {
-				e.printStackTrace ();
+				System.out.println ("surrender couldn't be sent to server");
+				e.printStackTrace (System.out);
 			}
 			next = this_player;
 			finish ();
@@ -116,8 +117,8 @@ public class GameMain extends Application {
 	}
 	
 	void reset () {
-		redPieces = 12;
-		bluePieces = 12;
+		whitePieces = 12;
+		blackPieces = 12;
 		if (selected) {
 			grid[selectedRow][selectedCol].getChildren ().remove (2);
 		}
@@ -129,10 +130,10 @@ public class GameMain extends Application {
 				}
 				if (((row+col)&1) != 0) {
 					if (row >= 5) {
-						state[row][col] = RED;
+						state[row][col] = WHITE;
 					}
 					else if (row<=2) {
-						state[row][col] = BLUE;
+						state[row][col] = BLACK;
 					}
 					if (state[row][col] != NONE) {
 						add_piece (row, col, state[row][col]);
@@ -166,10 +167,10 @@ public class GameMain extends Application {
 	//</editor-fold>
 	
 	
-	private boolean stalemate () {
+	private boolean mate () {
 		for (byte i = 0; i<8; i++) {
 			for (byte j = 0; j<8; j++) {
-				if ((state[i][j] == next || state[i][j] == next+2) && set_valids (i, j, false)) {
+				if ((state[i][j] == next || state[i][j] == next+2) && set_valids (i, j)) {
 					return false;
 				}
 			}
@@ -178,25 +179,25 @@ public class GameMain extends Application {
 	}
 	
 	private void changeNext(){
-		if (next == RED) {
-			next = BLUE;
-			turn_text.setText ("Blue's turn");
+		if (next == WHITE) {
+			next = BLACK;
+			turn_text.setText ("Black's turn");
 		}
-		else if (next==BLUE) {
-			next = RED;
-			turn_text.setText ("Red's turn");
+		else if (next== BLACK) {
+			next = WHITE;
+			turn_text.setText ("White's turn");
 		}
-		if (stalemate () && (singlePlayer || this_player==next)) {
+		if (mate () && (singlePlayer || this_player==next)) {
 			surrender ();
-		} 
+		}
 	}
 	
-	private boolean set_valids (byte row, byte col, boolean jumpOnly) {
-		byte strt = 0, nd = 2, stt = state[row][col];//strt and nd by default (for red)
-		if (stt == RED_KING || stt == BLUE_KING) {
+	private boolean set_valids (byte row, byte col) {
+		byte strt = 0, nd = 2, stt = state[row][col];//strt and nd by default (for white)
+		if (stt == WHITE_KING || stt == BLACK_KING) {
 			nd = 4;
 		}
-		else if (stt == BLUE) {
+		else if (stt == BLACK) {
 			strt = 2;
 			nd = 4;
 		}
@@ -215,10 +216,10 @@ public class GameMain extends Application {
 				byte trgtrow2 = (byte) (trgtrow+dirrow[i]), trgtcol2 = (byte) (trgtcol+dircol[i]);
 				boolean vld_jmp = (valid_index (trgtrow2, trgtcol2) && state[trgtrow2][trgtcol2] == NONE);
 				if (vld_jmp) {
-					if ((stt == BLUE || stt == BLUE_KING) && (trgtstt == RED || trgtstt==RED_KING)) {
+					if ((stt == BLACK || stt == BLACK_KING) && (trgtstt == WHITE || trgtstt== WHITE_KING)) {
 						valid_to[trgtrow2][trgtcol2] = JUMP;
 						flg_jmp = true;
-					} else if ((stt == RED || stt == RED_KING) && (trgtstt == BLUE || trgtstt==BLUE_KING)) {
+					} else if ((stt == WHITE || stt == WHITE_KING) && (trgtstt == BLACK || trgtstt== BLACK_KING)) {
 						valid_to[trgtrow2][trgtcol2] = JUMP;
 						flg_jmp = true;
 					}
@@ -226,17 +227,21 @@ public class GameMain extends Application {
 			}
 		}
 		if (jumpOnly && !flg_jmp) {
+			jumpOnly = false;
 			changeNext ();
+		}
+		else if (jumpOnly) {
+			select_cell (selectedRow, selectedCol);
 		}
 		return flg_jmp || flg_mv;
 	}
 	
 	private void move (byte toRow, byte toCol) {
 		grid[selectedRow][selectedCol].getChildren ().remove (1, 3);
-		if (state[selectedRow][selectedCol] == RED && toRow == 0) {
-			state[selectedRow][selectedCol] = RED_KING;
-		} else if (state[selectedRow][selectedCol] == BLUE && toRow == 7) {
-			state[selectedRow][selectedCol] = BLUE_KING;
+		if (state[selectedRow][selectedCol] == WHITE && toRow == 0) {
+			state[selectedRow][selectedCol] = WHITE_KING;
+		} else if (state[selectedRow][selectedCol] == BLACK && toRow == 7) {
+			state[selectedRow][selectedCol] = BLACK_KING;
 		}
 		add_piece (toRow, toCol, state[selectedRow][selectedCol]);
 		state[toRow][toCol] = state[selectedRow][selectedCol];
@@ -246,21 +251,24 @@ public class GameMain extends Application {
 			byte removeRow = (byte) ((selectedRow+toRow)/2), removeCol = (byte) ((selectedCol+toCol)/2);
 			grid[removeRow][removeCol].getChildren ().remove (1);
 			state[removeRow][removeCol] = NONE;
-			if (next == RED) {
-				bluePieces--;
-				if (bluePieces == 0) {
+			if (next == WHITE) {
+				blackPieces--;
+				if (blackPieces == 0) {
 					changeNext ();
-					finish ();
+//					finish ();
 				}
-			} else if (next == BLUE) {
-				redPieces--;
-				if (redPieces == 0) {
+			} else if (next == BLACK) {
+				whitePieces--;
+				if (whitePieces == 0) {
 					changeNext ();
-					finish ();
+//					finish ();
 				}
 			}
 			reset_validTo ();
-			set_valids (toRow, toCol, true);
+			jumpOnly = true;
+			selectedRow = toRow;
+			selectedCol = toCol;
+			set_valids (toRow, toCol);
 		}
 		else {
 			changeNext ();
@@ -272,29 +280,29 @@ public class GameMain extends Application {
 			if (valid_to[_row][_col] != NONE) {
 				move (_row, _col);
 			}
-			else if (state[_row][_col] == state[selectedRow][selectedCol] || state[_row][_col] == state[selectedRow][selectedCol]+2) {
+			else if (state[_row][_col] == next || state[_row][_col] == next+2) {
 				grid[selectedRow][selectedCol].getChildren ().remove (2);
 				select_cell (_row, _col);
 				reset_validTo ();
-				set_valids (_row, _col, false);
+				set_valids (_row, _col);
 			}
 		}
 		else {
-			if (state[_row][_col] == next || state[_row][_col]==next+2) {
+			if (state[_row][_col] == next || state[_row][_col] == next+2) {
 				select_cell (_row, _col);
 				reset_validTo ();
-				set_valids (_row, _col, false);
+				set_valids (_row, _col);
 			}
 		}
 	}
 	
 	@Override
 	public void start (Stage primaryStage) throws Exception {
-		checker_images[RED] = red_piece;
-		checker_images[BLUE] = blue_piece;
-		checker_images[RED_KING] = red_king;
-		checker_images[BLUE_KING] = blue_king;
-		next = RED;
+		checker_images[WHITE] = white_piece;
+		checker_images[BLACK] = black_piece;
+		checker_images[WHITE_KING] = white_king;
+		checker_images[BLACK_KING] = black_king;
+		next = WHITE;
 		game_window = primaryStage;
 		Parent root = FXMLLoader.load (getClass ().getResource ("mainscene.fxml"));
 		game_scene = new Scene (root);
@@ -304,15 +312,16 @@ public class GameMain extends Application {
 		for (byte col = 0; col<8; col++) {
 			for (byte row = 0; row<8; row++) {
 				final byte _col = col, _row = row;
-				grid[row][col] = new StackPane (new Rectangle (60, 60, ((row+col)&1) != 0 ? Color.BLACK : Color.WHITE));
+				grid[row][col] = new StackPane (new ImageView (((row+col)&1) != 0 ? bg_black : bg_white));
 				grid[row][col].setOnMouseClicked (event -> {
-					if (next == this_player || next == this_player+2 || singlePlayer) {
-						System.out.println (_row+" "+_col+" "+valid_to[_row][_col]+" "+next+" "+state[_row][_col]);
+					if ((next == this_player || singlePlayer) && !(jumpOnly && valid_to[_row][_col] == NONE)) {
+						System.out.println (_row+" "+_col+" "+valid_to[_row][_col]+" "+next+" "+state[_row][_col]+" "+jumpOnly);
 						if (!singlePlayer) {
 							try {
 								out_server.writeObject (Byte.toString (_row)+" "+Byte.toString (_col)+" "+Integer.toString (itsIndex));
 							} catch (IOException e) {
 								System.out.println ("sending to server error");
+								e.printStackTrace (System.out);
 							}
 						}
 						click (_row, _col);
@@ -323,6 +332,7 @@ public class GameMain extends Application {
 		}
 		reset ();
 		game_window.setTitle ("Multiplayer Checkers");
+		game_window.getIcons ().add (new Image ("images/icon.png"));
 		game_window.setScene (game_scene);
 		game_window.show ();
 		new Thread(() -> {
@@ -340,9 +350,9 @@ public class GameMain extends Application {
 						st.nextToken ();
 						itsIndex = Integer.parseInt (st.nextToken ());
 						if ((itsIndex&1) != 0) {
-							this_player = BLUE;
+							this_player = BLACK;
 							Platform.runLater (() -> {
-								turn_text.setText ("Red's turn");
+								turn_text.setText ("White's turn");
 								for (int row = 0; row<8; row++) {
 									for (int col = 0; col<8; col++) {
 										checkerboard.add (grid[row][col], 7-col, 7-row);
@@ -353,9 +363,9 @@ public class GameMain extends Application {
 						System.out.println (itsIndex+" "+(itsIndex^1));
 					}
 					else if (s.equals ("pair done")) {
-						this_player = RED;
+						this_player = WHITE;
 						Platform.runLater (() -> {
-							turn_text.setText ("Red's turn");
+							turn_text.setText ("White's turn");
 							for (int row = 0; row<8; row++) {
 								for (int col = 0; col<8; col++) {
 									checkerboard.add (grid[row][col], col, row);
@@ -382,11 +392,13 @@ public class GameMain extends Application {
 				}
 			} catch (InterruptedException e) {
 				System.out.println ("Game's data processingThread is interrepted");
+				e.printStackTrace (System.out);
 			} catch (Exception e) {
-				System.out.println("Game's data processing error" + e.toString());
+				System.out.println ("Game's data processing error");
+				e.printStackTrace (System.out);
 				singlePlayer = true;
 				Platform.runLater (()->{
-					turn_text.setText ("Red's turn");
+					turn_text.setText ("White's turn");
 					for (int row = 0; row<8; row++) {
 						for (int col = 0; col<8; col++) {
 							checkerboard.add (grid[row][col], col, row);/*else show waiting*/
@@ -404,6 +416,7 @@ public class GameMain extends Application {
 				}
 			} catch (IOException e) {
 				System.out.println ("socket's input or output stream couldn't be closed");
+				e.printStackTrace (System.out);
 			}
 		}).start ();
 		primaryStage.setOnCloseRequest(e -> System.exit(1));

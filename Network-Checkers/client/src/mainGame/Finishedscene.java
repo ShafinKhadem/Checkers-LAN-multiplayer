@@ -11,12 +11,19 @@ public class Finishedscene {
 	
 	@FXML
 	void rstrt(ActionEvent event) {
+		ClientMain.game.dialog.hide ();
 		ClientMain.game.reset ();
 		try {
+			ClientMain.game.stop ();
 			ClientMain.game.start (ClientMain.staticStage);
 		} catch (Exception e) {
-			e.printStackTrace ();
+			System.out.println ("game couldn't be restarted");
+			e.printStackTrace (System.out);
 		}
-		ClientMain.game.dialog.hide ();
+	}
+	
+	@FXML
+	void quit (ActionEvent event) {
+		System.exit (0);
 	}
 }

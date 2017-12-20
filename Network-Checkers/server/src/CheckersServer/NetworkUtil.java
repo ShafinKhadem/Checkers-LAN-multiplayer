@@ -17,7 +17,8 @@ public class NetworkUtil
 			oos=new ObjectOutputStream(socket.getOutputStream());
 			ois=new ObjectInputStream(socket.getInputStream());
 		} catch (Exception e) {
-			System.out.println("Exception In constructing NetworkUtil : " + e.toString());
+			System.out.println("Exception In constructing NetworkUtil : ");
+			e.printStackTrace (System.out);
 		}
 	}
 
@@ -26,16 +27,22 @@ public class NetworkUtil
 		try {
 			o=ois.readObject();
 		} catch (Exception e) {
-		  	System.out.println("Reading Error in network : " + e.toString());
+		  	System.out.println("Reading Error in network : ");
+			e.printStackTrace (System.out);
 		}
 		return o;
+	}
+	
+	public String readString () {
+		return (String) read ();
 	}
 	
 	public void write(Object o) {
 		try {
 			oos.writeObject(o);                        
 		} catch (IOException e) {
-			System.out.println("Writing  Error in network : " + e.toString());
+			System.out.println("Writing  Error in network : ");
+			e.printStackTrace (System.out);
 		}
 	}
 
@@ -44,7 +51,8 @@ public class NetworkUtil
 			ois.close();
 			oos.close();
 		} catch (Exception e) {
-			System.out.println("Closing Error in network : "  + e.toString());
+			System.out.println("Closing Error in network : " );
+			e.printStackTrace (System.out);
 		}
 	}
 }

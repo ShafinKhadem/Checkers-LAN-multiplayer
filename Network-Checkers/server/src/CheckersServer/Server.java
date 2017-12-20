@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class Server extends Thread {
 	private ArrayList<NetworkUtil> ncs = new ArrayList<> ();
-//	private int[] itsPair = new int[1000+5];
+	private boolean[] off = new boolean[1000+5];
 	
 	@Override
 	public void run () {
@@ -20,12 +20,12 @@ public class Server extends Thread {
 				final NetworkUtil _nc = nc;
 				new Thread (() -> {
 					while (true) {
-						String s = (String) _nc.read ();
+						String s = _nc.readString ();
 						System.out.println (s);
 						if (s == null) {
 							int sz = ncs.size ();
 							for (int i = sz-1; i >= 0; i--) {
-								if (ncs.get (i) == _nc) {
+								if (ncs.get (i) == _nc && !off[i]) {
 									System.out.println ("paisi "+i);
 									if ((i^1)<sz) {
 										ncs.get (i^1).write ("surrender");
@@ -52,13 +52,21 @@ public class Server extends Thread {
 							int index = Integer.parseInt (os[2]);
 							NetworkUtil nu = ncs.get (index^1);
 							nu.write (s);
-							System.out.println (index^1);
-							//let's ignore offer draw now.
+							//let's ignore offer draw and separate message class now.
+						}
+						if (s.startsWith ("surrender")) {
+							int sz = ncs.size ();
+							for (int i = sz-1; i >= 0; i--) {
+								if (ncs.get (i) == _nc) {
+									off[i] = true;
+								}
+							}
 						}
 						try {
 							Thread.sleep (300);
 						} catch (InterruptedException e) {
-							e.printStackTrace ();
+							System.out.println ("server thread interrupted");
+							e.printStackTrace (System.out);
 						}
 					}
 					_nc.closeConnection ();
@@ -66,7 +74,8 @@ public class Server extends Thread {
 				Thread.sleep (500);
 			}
 		}catch(Exception e) {
-			System.out.println("Server starts:"+e);
+			System.out.println ("Server error:");
+			e.printStackTrace (System.out);
 		}
 	}
 }

@@ -3,7 +3,7 @@ package mainGame;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-import static mainGame.GameMain.RED;
+import static mainGame.GameMain.WHITE;
 
 public class ClientMain extends Application {
 	
@@ -16,11 +16,11 @@ public class ClientMain extends Application {
 	@Override
 	public void start (Stage primaryStage) {
 		staticStage = primaryStage;
-		game = new GameMain (RED);
+		game = new GameMain (WHITE);
 		try {
-			game.stop ();
 			game.start (primaryStage);
 		} catch (Exception e) {
+			System.out.println ("Game starting error");
 			e.printStackTrace ();
 		}
 	}
