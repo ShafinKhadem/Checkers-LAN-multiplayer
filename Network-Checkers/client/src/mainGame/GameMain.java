@@ -1,5 +1,6 @@
 package mainGame;
 
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -9,12 +10,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 import java.io.*;
 import java.net.Socket;
@@ -25,16 +27,18 @@ import java.util.StringTokenizer;
  */
 
 public class GameMain extends Application {
-	//<editor-fold defaultstate="collapsed" desc="Surely done I think">
+	//<editor-fold defaultstate="collapsed" desc="variable declarations">
 	static final byte NONE = 0, WHITE = 1, BLACK = 2, WHITE_KING = 3, BLACK_KING = 4, MOVE = 5, JUMP = 6;
 	Stage game_window, dialog;
 	private Scene game_scene, scene;
 	private ObjectInputStream in_server;
 	private ObjectOutputStream out_server;
 	private int itsIndex;
-	private boolean singlePlayer = false, jumpOnly = false;
+	private boolean singlePlayer = false;
+	private boolean jumpOnly = false;
 	private Text turn_text;
 	private GridPane checkerboard;
+	private VBox whitebox, blackbox;
 	private final byte GRID_BASEX = 5, GRID_BASEY = 65, GRID_DIMENSION = 60;
 	private StackPane[][] grid = new StackPane[10][10];
 	private byte[][] state = new byte[10][10];
@@ -51,6 +55,8 @@ public class GameMain extends Application {
 	private byte whitePieces = 12, blackPieces = 12;
 	private byte dircol[]={1, -1, 1, -1}, dirrow[] = {-1, -1, 1, 1};
 	private boolean selected = false;
+	private String playerName = "anonymous";
+	//</editor-fold>
 	
 	
 	
@@ -93,7 +99,7 @@ public class GameMain extends Application {
 				result.setText ("White won");
 			}
 		}
-		dialog.initStyle (StageStyle.UNDECORATED);
+		dialog.setOnCloseRequest (event -> System.exit (1));
 		dialog.show();
 	}
 	
@@ -114,6 +120,24 @@ public class GameMain extends Application {
 	
 	private void add_piece (byte row, byte col, byte state) {
 		grid[row][col].getChildren ().add (new ImageView (checker_images[state]));
+	}
+	
+	private void captureAnimation (byte row, byte col, byte state) {
+		if (blackPieces+whitePieces<24) checkerboard.getChildren ().remove (64);
+		ImageView capturedPiece = new ImageView (checker_images[state]);
+		if (singlePlayer || this_player == WHITE) {
+			checkerboard.add (capturedPiece, col, row);
+		}
+		else {
+			checkerboard.add (capturedPiece, 7-col, 7-row);
+		}
+		TranslateTransition tt = new TranslateTransition(Duration.millis(400), capturedPiece);
+		tt.setToX (600);
+		tt.play();
+		Rectangle rectangle = new Rectangle (60, 3, Color.TRANSPARENT);
+		(state == BLACK || state == BLACK_KING ?blackbox:whitebox).getChildren ().add (rectangle);
+		rectangle = new Rectangle (60, 12, (state == BLACK || state == BLACK_KING ? Color.BLACK : Color.WHEAT));
+		(state == BLACK || state == BLACK_KING ?blackbox:whitebox).getChildren ().add (rectangle);
 	}
 	
 	void reset () {
@@ -143,6 +167,94 @@ public class GameMain extends Application {
 		}
 	}
 	
+	private void login () {
+		
+		new Thread(() -> {
+			try {
+				Socket socket = new Socket ("127.0.0.1", 33333);
+				in_server = new ObjectInputStream (socket.getInputStream());
+				out_server = new ObjectOutputStream (socket.getOutputStream());
+				out_server.writeObject ("new client");
+				String s;
+				StringTokenizer st;
+				while (true) {
+					s = (String) in_server.readObject ();
+					st = new StringTokenizer (s);
+					if (s.startsWith ("index")) {
+						st.nextToken ();
+						itsIndex = Integer.parseInt (st.nextToken ());
+						if ((itsIndex&1) != 0) {
+							this_player = BLACK;
+							Platform.runLater (() -> {
+								turn_text.setText ("White's turn");
+								for (int row = 0; row<8; row++) {
+									for (int col = 0; col<8; col++) {
+										checkerboard.add (grid[row][col], 7-col, 7-row);
+									}
+								}
+							});
+						}
+						System.out.println (itsIndex+" "+(itsIndex^1));
+					}
+					else if (s.equals ("pair done")) {
+						this_player = WHITE;
+						Platform.runLater (() -> {
+							turn_text.setText ("White's turn");
+							for (int row = 0; row<8; row++) {
+								for (int col = 0; col<8; col++) {
+									checkerboard.add (grid[row][col], col, row);
+								}
+							}
+						});
+					}
+					else if (s.startsWith ("surrender")) {
+						if (next == this_player) {
+							changeNext ();
+						}
+						Platform.runLater(() -> {
+							finish ();
+						});
+					}
+					else {
+						final byte _a = Byte.parseByte (st.nextToken ()), _b = Byte.parseByte (st.nextToken ());
+						System.out.println (_a+" "+_b);
+						Platform.runLater(() -> {
+							click (_a, _b);
+						});
+					}
+					Thread.sleep (300);
+				}
+			} catch (InterruptedException e) {
+				System.out.println ("Game's data processingThread is interrepted");
+				e.printStackTrace (System.out);
+			} catch (Exception e) {
+				System.out.println ("Game's data processing error");
+				e.printStackTrace (System.out);
+				singlePlayer = true;
+				Platform.runLater (()->{
+					turn_text.setText ("White's turn");
+					for (int row = 0; row<8; row++) {
+						for (int col = 0; col<8; col++) {
+							checkerboard.add (grid[row][col], col, row);/*else show waiting*/
+						}
+					}
+				});
+				System.out.println ("No more communicating with server as an offline game");
+				Thread.currentThread ().interrupt ();
+				return;
+			}
+			try {
+				if (!singlePlayer) {
+					in_server.close ();
+					out_server.close ();
+				}
+			} catch (IOException e) {
+				System.out.println ("socket's input or output stream couldn't be closed");
+				e.printStackTrace (System.out);
+			}
+		}).start ();
+	}
+	
 	private void select_cell (byte row, byte col) {
 		Rectangle rectangle = new Rectangle (55, 55, Color.TRANSPARENT);
 		rectangle.setStroke (Color.GREEN);
@@ -164,7 +276,6 @@ public class GameMain extends Application {
 			}
 		}
 	}
-	//</editor-fold>
 	
 	
 	private boolean mate () {
@@ -250,6 +361,7 @@ public class GameMain extends Application {
 		if (Math.abs (toRow-selectedRow)>1) {
 			byte removeRow = (byte) ((selectedRow+toRow)/2), removeCol = (byte) ((selectedCol+toCol)/2);
 			grid[removeRow][removeCol].getChildren ().remove (1);
+			captureAnimation (removeRow, removeCol, state[removeRow][removeCol]);
 			state[removeRow][removeCol] = NONE;
 			if (next == WHITE) {
 				blackPieces--;
@@ -309,6 +421,8 @@ public class GameMain extends Application {
 		turn_text = (Text) game_scene.lookup ("#turn");
 		turn_text.setText ("Waiting for opponent");
 		checkerboard = (GridPane) game_scene.lookup ("#checkerBoard");
+		whitebox = (VBox) game_scene.lookup ("#whitebox");
+		blackbox = (VBox) game_scene.lookup ("#blackbox");
 		for (byte col = 0; col<8; col++) {
 			for (byte row = 0; row<8; row++) {
 				final byte _col = col, _row = row;
@@ -335,90 +449,8 @@ public class GameMain extends Application {
 		game_window.getIcons ().add (new Image ("images/icon.png"));
 		game_window.setScene (game_scene);
 		game_window.show ();
-		new Thread(() -> {
-			try {
-				Socket socket = new Socket ("127.0.0.1", 33333);
-				in_server = new ObjectInputStream (socket.getInputStream());
-				out_server = new ObjectOutputStream (socket.getOutputStream());
-				out_server.writeObject ("new client");
-				String s;
-				StringTokenizer st;
-				while (true) {
-					s = (String) in_server.readObject ();
-					st = new StringTokenizer (s);
-					if (s.startsWith ("index")) {
-						st.nextToken ();
-						itsIndex = Integer.parseInt (st.nextToken ());
-						if ((itsIndex&1) != 0) {
-							this_player = BLACK;
-							Platform.runLater (() -> {
-								turn_text.setText ("White's turn");
-								for (int row = 0; row<8; row++) {
-									for (int col = 0; col<8; col++) {
-										checkerboard.add (grid[row][col], 7-col, 7-row);
-									}
-								}
-							});
-						}
-						System.out.println (itsIndex+" "+(itsIndex^1));
-					}
-					else if (s.equals ("pair done")) {
-						this_player = WHITE;
-						Platform.runLater (() -> {
-							turn_text.setText ("White's turn");
-							for (int row = 0; row<8; row++) {
-								for (int col = 0; col<8; col++) {
-									checkerboard.add (grid[row][col], col, row);
-								}
-							}
-						});
-					}
-					else if (s.startsWith ("surrender")) {
-						if (next == this_player) {
-							changeNext ();
-						}
-						Platform.runLater(() -> {
-							finish ();
-						});
-					}
-					else {
-						final byte _a = Byte.parseByte (st.nextToken ()), _b = Byte.parseByte (st.nextToken ());
-						System.out.println (_a+" "+_b);
-						Platform.runLater(() -> {
-							click (_a, _b);
-						});
-					}
-					Thread.sleep (300);
-				}
-			} catch (InterruptedException e) {
-				System.out.println ("Game's data processingThread is interrepted");
-				e.printStackTrace (System.out);
-			} catch (Exception e) {
-				System.out.println ("Game's data processing error");
-				e.printStackTrace (System.out);
-				singlePlayer = true;
-				Platform.runLater (()->{
-					turn_text.setText ("White's turn");
-					for (int row = 0; row<8; row++) {
-						for (int col = 0; col<8; col++) {
-							checkerboard.add (grid[row][col], col, row);/*else show waiting*/
-						}
-					}
-				});
-				System.out.println ("No more communicating with server as an offline game");
-				Thread.currentThread ().interrupt ();
-				return;
-			}
-			try {
-				if (!singlePlayer) {
-					in_server.close ();
-					out_server.close ();
-				}
-			} catch (IOException e) {
-				System.out.println ("socket's input or output stream couldn't be closed");
-				e.printStackTrace (System.out);
-			}
-		}).start ();
+		primaryStage.setResizable (false);
 		primaryStage.setOnCloseRequest(e -> System.exit(1));
+		login ();
 	}
 }

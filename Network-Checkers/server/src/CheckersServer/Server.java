@@ -59,6 +59,8 @@ public class Server extends Thread {
 							for (int i = sz-1; i >= 0; i--) {
 								if (ncs.get (i) == _nc) {
 									off[i] = true;
+									off[i^1] = true;
+									System.out.println ("offed "+i+" and "+(i^1));
 								}
 							}
 						}
