@@ -29,6 +29,7 @@ import java.util.StringTokenizer;
 public class GameMain extends Application {
 	//<editor-fold defaultstate="collapsed" desc="variable declarations">
 	static final byte NONE = 0, WHITE = 1, BLACK = 2, WHITE_KING = 3, BLACK_KING = 4, MOVE = 5, JUMP = 6;
+	static String whiteName = "", blackName = "", playerName="anonymous";
 	Stage game_window, dialog;
 	private Scene game_scene, scene;
 	private ObjectInputStream in_server;
@@ -55,7 +56,6 @@ public class GameMain extends Application {
 	private byte whitePieces = 12, blackPieces = 12;
 	private byte dircol[]={1, -1, 1, -1}, dirrow[] = {-1, -1, 1, 1};
 	private boolean selected = false;
-	private String playerName = "anonymous";
 	//</editor-fold>
 	
 	
@@ -93,10 +93,10 @@ public class GameMain extends Application {
 		}
 		else {
 			if (next == WHITE) {
-				result.setText ("Black won");
+				result.setText (blackName+" (Black) won");
 			}
 			else {
-				result.setText ("White won");
+				result.setText (whiteName+" (White) won");
 			}
 		}
 		dialog.setOnCloseRequest (event -> System.exit (1));
@@ -135,9 +135,9 @@ public class GameMain extends Application {
 		tt.setToX (600);
 		tt.play();
 		Rectangle rectangle = new Rectangle (60, 3, Color.TRANSPARENT);
-		(state == BLACK || state == BLACK_KING ?blackbox:whitebox).getChildren ().add (rectangle);
+		(state == BLACK || state == BLACK_KING ? blackbox : whitebox).getChildren ().add (rectangle);
 		rectangle = new Rectangle (60, 12, (state == BLACK || state == BLACK_KING ? Color.BLACK : Color.WHEAT));
-		(state == BLACK || state == BLACK_KING ?blackbox:whitebox).getChildren ().add (rectangle);
+		(state == BLACK || state == BLACK_KING ? blackbox : whitebox).getChildren ().add (rectangle);
 	}
 	
 	void reset () {
@@ -167,14 +167,26 @@ public class GameMain extends Application {
 		}
 	}
 	
+	
+	
 	private void login () {
-		
+		dialog = new Stage();
+		dialog.initModality(Modality.APPLICATION_MODAL);
+		dialog.initOwner(game_window);
+		set_scene (dialog, "loginScene.fxml");
+		dialog.setOnCloseRequest (event -> System.exit (1));
+		dialog.show();
+	}
+	
+	void loginSuccess () {
+		dialog.hide ();
+		game_window.show ();
 		new Thread(() -> {
 			try {
 				Socket socket = new Socket ("127.0.0.1", 33333);
 				in_server = new ObjectInputStream (socket.getInputStream());
 				out_server = new ObjectOutputStream (socket.getOutputStream());
-				out_server.writeObject ("new client");
+				out_server.writeObject ("new client "+playerName);
 				String s;
 				StringTokenizer st;
 				while (true) {
@@ -183,10 +195,28 @@ public class GameMain extends Application {
 					if (s.startsWith ("index")) {
 						st.nextToken ();
 						itsIndex = Integer.parseInt (st.nextToken ());
-						if ((itsIndex&1) != 0) {
+						System.out.println ("Pair: "+itsIndex+" "+(itsIndex^1));
+					}
+					else if (s.startsWith ("pair")) {
+						System.out.println (s);
+						String[] os = s.split (" ");
+						whiteName = os[1];
+						blackName = os[2];
+						if ((itsIndex&1) == 0) {
+							this_player = WHITE;
+							Platform.runLater (() -> {
+								turn_text.setText (whiteName+" (White)'s turn");
+								for (int row = 0; row<8; row++) {
+									for (int col = 0; col<8; col++) {
+										checkerboard.add (grid[row][col], col, row);
+									}
+								}
+							});
+						}
+						else {
 							this_player = BLACK;
 							Platform.runLater (() -> {
-								turn_text.setText ("White's turn");
+								turn_text.setText (whiteName+" (White)'s turn");
 								for (int row = 0; row<8; row++) {
 									for (int col = 0; col<8; col++) {
 										checkerboard.add (grid[row][col], 7-col, 7-row);
@@ -194,18 +224,6 @@ public class GameMain extends Application {
 								}
 							});
 						}
-						System.out.println (itsIndex+" "+(itsIndex^1));
-					}
-					else if (s.equals ("pair done")) {
-						this_player = WHITE;
-						Platform.runLater (() -> {
-							turn_text.setText ("White's turn");
-							for (int row = 0; row<8; row++) {
-								for (int col = 0; col<8; col++) {
-									checkerboard.add (grid[row][col], col, row);
-								}
-							}
-						});
 					}
 					else if (s.startsWith ("surrender")) {
 						if (next == this_player) {
@@ -231,8 +249,9 @@ public class GameMain extends Application {
 				System.out.println ("Game's data processing error");
 				e.printStackTrace (System.out);
 				singlePlayer = true;
+				whiteName = blackName = playerName;
 				Platform.runLater (()->{
-					turn_text.setText ("White's turn");
+					turn_text.setText (whiteName+" (White)'s turn");
 					for (int row = 0; row<8; row++) {
 						for (int col = 0; col<8; col++) {
 							checkerboard.add (grid[row][col], col, row);/*else show waiting*/
@@ -292,11 +311,11 @@ public class GameMain extends Application {
 	private void changeNext(){
 		if (next == WHITE) {
 			next = BLACK;
-			turn_text.setText ("Black's turn");
+			turn_text.setText (blackName+" (Black)'s turn");
 		}
 		else if (next== BLACK) {
 			next = WHITE;
-			turn_text.setText ("White's turn");
+			turn_text.setText (whiteName+" (White)'s turn");
 		}
 		if (mate () && (singlePlayer || this_player==next)) {
 			surrender ();
@@ -448,7 +467,6 @@ public class GameMain extends Application {
 		game_window.setTitle ("Multiplayer Checkers");
 		game_window.getIcons ().add (new Image ("images/icon.png"));
 		game_window.setScene (game_scene);
-		game_window.show ();
 		primaryStage.setResizable (false);
 		primaryStage.setOnCloseRequest(e -> System.exit(1));
 		login ();

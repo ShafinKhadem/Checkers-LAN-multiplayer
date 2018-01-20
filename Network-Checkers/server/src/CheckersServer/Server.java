@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class Server extends Thread {
 	private ArrayList<NetworkUtil> ncs = new ArrayList<> ();
 	private boolean[] off = new boolean[1000+5];
+	private String whitePlayer = "anonymous";
 	
 	@Override
 	public void run () {
@@ -16,7 +17,7 @@ public class Server extends Thread {
 			NetworkUtil nc;
 			while (true) {
 				clientSock = servSock.accept();
-				nc=new NetworkUtil(clientSock);
+				nc = new NetworkUtil (clientSock);
 				final NetworkUtil _nc = nc;
 				new Thread (() -> {
 					while (true) {
@@ -38,13 +39,19 @@ public class Server extends Thread {
 							}
 							break;
 						}
-						if (s.equals ("new client")) {
+						if (s.startsWith ("new client")) {
 							ncs.add (_nc);
 							int index = (ncs.size ()-1);
 							_nc.write ("index"+" "+index);
-							if ((index&1) != 0) {
+							String[] os = s.split (" ");
+							if ((index&1) == 0) {
+								whitePlayer = os[2];
+								System.out.println ("whitePlayer "+whitePlayer);
+							}
+							else {
 								NetworkUtil nu = ncs.get (index^1);
-								nu.write ("pair done");
+								nu.write ("pair "+whitePlayer+" "+os[2]);
+								_nc.write ("pair "+whitePlayer+" "+os[2]);
 							}
 						}
 						else {

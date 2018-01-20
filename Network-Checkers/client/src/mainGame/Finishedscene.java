@@ -12,6 +12,7 @@ public class Finishedscene {
 	@FXML
 	void rstrt(ActionEvent event) {
 		ClientMain.game.dialog.hide ();
+		ClientMain.game.game_window.hide ();
 		ClientMain.game.reset ();
 		try {
 			ClientMain.game.stop ();
