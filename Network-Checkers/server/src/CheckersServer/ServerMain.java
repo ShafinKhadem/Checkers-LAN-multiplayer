@@ -14,8 +14,12 @@ public class ServerMain extends Application {
 		Scene scene = new Scene (FXMLLoader.load (getClass ().getResource ("serverscene.fxml")));
 		primaryStage.setScene (scene);
 		primaryStage.show ();
-		primaryStage.setOnCloseRequest (event -> System.exit (1));
-		new Server ().start ();
+		Server server = new Server ();
+		server.start ();
+		primaryStage.setOnCloseRequest (event -> {
+			server.saveFile ();
+			System.exit (1);
+		});
 	}
 	
 	public static void main (String[] args) {

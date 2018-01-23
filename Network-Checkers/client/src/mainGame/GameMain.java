@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -29,14 +30,14 @@ import java.util.StringTokenizer;
 public class GameMain extends Application {
 	//<editor-fold defaultstate="collapsed" desc="variable declarations">
 	static final byte NONE = 0, WHITE = 1, BLACK = 2, WHITE_KING = 3, BLACK_KING = 4, MOVE = 5, JUMP = 6;
-	static String whiteName = "", blackName = "", playerName="anonymous";
+	static String whiteName = "", blackName = "", playerName="anonymous", passWord = "";
+	static int itsIndex, itsGamesPlyed = 0, itsGamesWon = 0;
 	Stage game_window, dialog;
 	private Scene game_scene, scene;
 	private ObjectInputStream in_server;
 	private ObjectOutputStream out_server;
-	private int itsIndex;
 	private boolean singlePlayer = false;
-	private boolean jumpOnly = false;
+	private boolean jumpOnly = false, signIn = true;
 	private Text turn_text;
 	private GridPane checkerboard;
 	private VBox whitebox, blackbox;
@@ -60,6 +61,7 @@ public class GameMain extends Application {
 	
 	
 	
+	//<editor-fold defaultstate="collapsed" desc="Finished for now">
 	public GameMain (byte player) {
 		this_player = player;
 	}
@@ -122,27 +124,12 @@ public class GameMain extends Application {
 		grid[row][col].getChildren ().add (new ImageView (checker_images[state]));
 	}
 	
-	private void captureAnimation (byte row, byte col, byte state) {
-		if (blackPieces+whitePieces<24) checkerboard.getChildren ().remove (64);
-		ImageView capturedPiece = new ImageView (checker_images[state]);
-		if (singlePlayer || this_player == WHITE) {
-			checkerboard.add (capturedPiece, col, row);
-		}
-		else {
-			checkerboard.add (capturedPiece, 7-col, 7-row);
-		}
-		TranslateTransition tt = new TranslateTransition(Duration.millis(400), capturedPiece);
-		tt.setToX (600);
-		tt.play();
-		Rectangle rectangle = new Rectangle (60, 3, Color.TRANSPARENT);
-		(state == BLACK || state == BLACK_KING ? blackbox : whitebox).getChildren ().add (rectangle);
-		rectangle = new Rectangle (60, 12, (state == BLACK || state == BLACK_KING ? Color.BLACK : Color.WHEAT));
-		(state == BLACK || state == BLACK_KING ? blackbox : whitebox).getChildren ().add (rectangle);
-	}
-	
 	void reset () {
 		whitePieces = 12;
 		blackPieces = 12;
+		signIn = true;
+		itsGamesPlyed = 0;
+		itsGamesWon = 0;
 		if (selected) {
 			grid[selectedRow][selectedCol].getChildren ().remove (2);
 		}
@@ -166,10 +153,29 @@ public class GameMain extends Application {
 			}
 		}
 	}
+	//</editor-fold>
+	
+	private void captureAnimation (byte row, byte col, byte state) {
+		if (blackPieces+whitePieces<24) checkerboard.getChildren ().remove (64);
+		ImageView capturedPiece = new ImageView (checker_images[state]);
+		if (singlePlayer || this_player == WHITE) {
+			checkerboard.add (capturedPiece, col, row);
+		}
+		else {
+			checkerboard.add (capturedPiece, 7-col, 7-row);
+		}
+		TranslateTransition tt = new TranslateTransition(Duration.millis(400), capturedPiece);
+		tt.setToX (600);
+		tt.play();
+		Rectangle rectangle = new Rectangle (60, 3, Color.TRANSPARENT);
+		(state == BLACK || state == BLACK_KING ? blackbox : whitebox).getChildren ().add (rectangle);
+		rectangle = new Rectangle (60, 12, (state == BLACK || state == BLACK_KING ? Color.BLACK : Color.WHEAT));
+		(state == BLACK || state == BLACK_KING ? blackbox : whitebox).getChildren ().add (rectangle);
+	}
 	
 	
 	
-	private void login () {
+	private void showLogin () {
 		dialog = new Stage();
 		dialog.initModality(Modality.APPLICATION_MODAL);
 		dialog.initOwner(game_window);
@@ -178,17 +184,48 @@ public class GameMain extends Application {
 		dialog.show();
 	}
 	
-	void loginSuccess () {
-		dialog.hide ();
-		game_window.show ();
+	void signup () {
+		signIn = false;
+		login ();
+	}
+	
+	void login () {
 		new Thread(() -> {
 			try {
 				Socket socket = new Socket ("127.0.0.1", 33333);
 				in_server = new ObjectInputStream (socket.getInputStream());
 				out_server = new ObjectOutputStream (socket.getOutputStream());
-				out_server.writeObject ("new client "+playerName);
 				String s;
 				StringTokenizer st;
+				if (signIn) {
+					out_server.writeObject ("new client "+playerName+" "+passWord);
+				}
+				else {
+					out_server.writeObject ("new signup "+playerName+" "+passWord);
+				}
+				s = (String) in_server.readObject ();
+				while (s.equals ("invalid")) {
+					System.out.println (signIn);
+					Platform.runLater (()->{
+						Alert alert = new Alert (Alert.AlertType.WARNING);
+						if (signIn) {
+							alert.setContentText ("Invalid login");
+						}
+						else {
+							alert.setContentText ("Username already taken");
+						}
+						alert.show ();
+						signIn = true;
+					});
+					s = (String) in_server.readObject ();
+				}
+				String[] os = s.split (" ");
+				itsGamesPlyed = Integer.parseInt (os[1]);
+				itsGamesWon = Integer.parseInt (os[2]);
+				Platform.runLater (()->{
+					dialog.hide ();
+					game_window.show ();
+				});
 				while (true) {
 					s = (String) in_server.readObject ();
 					st = new StringTokenizer (s);
@@ -199,7 +236,7 @@ public class GameMain extends Application {
 					}
 					else if (s.startsWith ("pair")) {
 						System.out.println (s);
-						String[] os = s.split (" ");
+						os = s.split (" ");
 						whiteName = os[1];
 						blackName = os[2];
 						if ((itsIndex&1) == 0) {
@@ -232,6 +269,7 @@ public class GameMain extends Application {
 						Platform.runLater(() -> {
 							finish ();
 						});
+						out_server.writeObject ("win");
 					}
 					else {
 						final byte _a = Byte.parseByte (st.nextToken ()), _b = Byte.parseByte (st.nextToken ());
@@ -274,6 +312,7 @@ public class GameMain extends Application {
 		}).start ();
 	}
 	
+	//<editor-fold defaultstate="collapsed" desc="Finished for now">
 	private void select_cell (byte row, byte col) {
 		Rectangle rectangle = new Rectangle (55, 55, Color.TRANSPARENT);
 		rectangle.setStroke (Color.GREEN);
@@ -426,9 +465,11 @@ public class GameMain extends Application {
 			}
 		}
 	}
+	//</editor-fold>
 	
 	@Override
 	public void start (Stage primaryStage) throws Exception {
+		//<editor-fold defaultstate="collapsed" desc="initializations">
 		checker_images[WHITE] = white_piece;
 		checker_images[BLACK] = black_piece;
 		checker_images[WHITE_KING] = white_king;
@@ -442,6 +483,7 @@ public class GameMain extends Application {
 		checkerboard = (GridPane) game_scene.lookup ("#checkerBoard");
 		whitebox = (VBox) game_scene.lookup ("#whitebox");
 		blackbox = (VBox) game_scene.lookup ("#blackbox");
+		//</editor-fold>
 		for (byte col = 0; col<8; col++) {
 			for (byte row = 0; row<8; row++) {
 				final byte _col = col, _row = row;
@@ -469,6 +511,6 @@ public class GameMain extends Application {
 		game_window.setScene (game_scene);
 		primaryStage.setResizable (false);
 		primaryStage.setOnCloseRequest(e -> System.exit(1));
-		login ();
+		showLogin ();
 	}
 }

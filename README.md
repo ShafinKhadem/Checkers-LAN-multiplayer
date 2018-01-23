@@ -4,7 +4,7 @@ Our term project of Level 1 term 2 Network checkers
 # Todo list
 - [X] make basic game
 - [X] Process all the requests and make pairs from them
-- [ ] Optional: Take the players’ name as input
+- [X] Optional: Implement login system
 - [ ] Optional: show possible moves
 
 # Useful links

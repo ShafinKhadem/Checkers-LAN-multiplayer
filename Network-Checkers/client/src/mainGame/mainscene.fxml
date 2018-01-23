@@ -12,13 +12,14 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="580.0" prefWidth="580.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainGame.Controller">
+<VBox prefHeight="580.0" prefWidth="580.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="mainGame.GameController">
     <MenuBar VBox.vgrow="NEVER">
         <Menu mnemonicParsing="false" text="Options">
             <MenuItem mnemonicParsing="false" onAction="#surrender" text="Surrender" />
             <!--<MenuItem mnemonicParsing="false" onAction="#offerdraw" text="Offer draw" />-->
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" onAction="#help" text="Help" />
+         <MenuItem mnemonicParsing="false" onAction="#showHistory" text="Track record" />
         </Menu>
     </MenuBar>
     <Pane>

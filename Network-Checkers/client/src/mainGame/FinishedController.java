@@ -4,7 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;
 
-public class Finishedscene {
+public class FinishedController {
 	@FXML
 	private Text win;
 	public Text result;
