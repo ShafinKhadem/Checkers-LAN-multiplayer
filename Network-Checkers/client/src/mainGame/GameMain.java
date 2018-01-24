@@ -13,6 +13,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -38,7 +39,8 @@ public class GameMain extends Application {
 	private ObjectOutputStream out_server;
 	private boolean singlePlayer = false;
 	private boolean jumpOnly = false, signIn = true;
-	private Text turn_text;
+	private Text turn_text, name, nameTitle, opponent, opponetTitle;
+	private Circle animationCircle;
 	private GridPane checkerboard;
 	private VBox whitebox, blackbox;
 	private final byte GRID_BASEX = 5, GRID_BASEY = 65, GRID_DIMENSION = 60;
@@ -167,10 +169,10 @@ public class GameMain extends Application {
 		TranslateTransition tt = new TranslateTransition(Duration.millis(400), capturedPiece);
 		tt.setToX (600);
 		tt.play();
-		Rectangle rectangle = new Rectangle (60, 3, Color.TRANSPARENT);
-		(state == BLACK || state == BLACK_KING ? blackbox : whitebox).getChildren ().add (rectangle);
-		rectangle = new Rectangle (60, 12, (state == BLACK || state == BLACK_KING ? Color.BLACK : Color.WHEAT));
-		(state == BLACK || state == BLACK_KING ? blackbox : whitebox).getChildren ().add (rectangle);
+		Circle circle = new Circle (1, 1, 10, Color.TRANSPARENT);
+		(state == BLACK || state == BLACK_KING ? blackbox : whitebox).getChildren ().add (circle);
+		circle = new Circle (1, 1, 10,(state == BLACK || state == BLACK_KING ? Color.BLACK : Color.WHEAT));
+		(state == BLACK || state == BLACK_KING ? blackbox : whitebox).getChildren ().add (circle);
 	}
 	
 	
@@ -227,6 +229,17 @@ public class GameMain extends Application {
 					game_window.show ();
 				});
 				while (true) {
+					TranslateTransition tt = new TranslateTransition(Duration.millis(500),animationCircle);
+					tt.setToY(400);
+					tt.setAutoReverse(true);
+					tt.setCycleCount(TranslateTransition.INDEFINITE);
+					tt.play();
+					if((turn_text.getText().compareTo("Waiting for opponent")) != 0)
+					{
+						nameTitle.setVisible(true);
+						opponetTitle.setVisible(true);
+						animationCircle.setVisible(false);
+					}
 					s = (String) in_server.readObject ();
 					st = new StringTokenizer (s);
 					if (s.startsWith ("index")) {
@@ -278,6 +291,14 @@ public class GameMain extends Application {
 							click (_a, _b);
 						});
 					}
+					if (this_player == WHITE) {
+						name.setText(whiteName);
+						opponent.setText(blackName);
+					}
+					else {
+						name.setText(blackName);
+						opponent.setText(whiteName);
+					}
 					Thread.sleep (300);
 				}
 			} catch (InterruptedException e) {
@@ -288,6 +309,8 @@ public class GameMain extends Application {
 				e.printStackTrace (System.out);
 				singlePlayer = true;
 				whiteName = blackName = playerName;
+				name.setText(whiteName);
+				nameTitle.setVisible(true);
 				Platform.runLater (()->{
 					turn_text.setText (whiteName+" (White)'s turn");
 					for (int row = 0; row<8; row++) {
@@ -479,6 +502,13 @@ public class GameMain extends Application {
 		Parent root = FXMLLoader.load (getClass ().getResource ("mainscene.fxml"));
 		game_scene = new Scene (root);
 		turn_text = (Text) game_scene.lookup ("#turn");
+		name = (Text) game_scene.lookup("#name");
+		opponent = (Text) game_scene.lookup("#opponentName");
+		opponetTitle = (Text) game_scene.lookup("#opponentTitle");
+		nameTitle = (Text) game_scene.lookup("#nameTitle");
+		animationCircle = (Circle) game_scene.lookup("#animationCircle");
+		opponetTitle.setVisible(false);
+		nameTitle.setVisible(false);
 		turn_text.setText ("Waiting for opponent");
 		checkerboard = (GridPane) game_scene.lookup ("#checkerBoard");
 		whitebox = (VBox) game_scene.lookup ("#whitebox");

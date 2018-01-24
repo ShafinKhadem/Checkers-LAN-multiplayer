@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0"
+      prefWidth="320.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="mainGame.FinishedController">
+    <Text fx:id="result" layoutX="55.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER"
+          wrappingWidth="200.0">
+        <font>
+            <Font size="30.0"/>
+        </font>
+    </Text>
+    <Button layoutX="50.0" layoutY="125.0" mnemonicParsing="false" onAction="#rstrt" prefWidth="95.0" text="New game"/>
+    <Button layoutX="175.0" layoutY="125.0" mnemonicParsing="false" onAction="#quit" prefWidth="95.0" text="Quit game"/>
+</Pane>
