@@ -6,11 +6,36 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="017e0459-0c7d-411e-a4fe-b41c4534e4ef" name="Default" comment="">
+    <list default="true" id="017e0459-0c7d-411e-a4fe-b41c4534e4ef" name="Default" comment="animation imrpoved and bugs fixed">
+      <change beforePath="" afterPath="$PROJECT_DIR$/out/artifacts/server/users.txt" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/out/production/Network-Checkers/sample/Controller.class" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/out/production/Network-Checkers/sample/Main$1.class" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/out/production/Network-Checkers/sample/Main.class" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/out/production/Network-Checkers/sample/sample.fxml" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/client/src/mainGame/FinishedController.java" afterPath="$PROJECT_DIR$/client/src/mainGame/FinishedController.java" />
+      <change beforePath="$PROJECT_DIR$/client/src/mainGame/GameController.java" afterPath="$PROJECT_DIR$/client/src/mainGame/GameController.java" />
       <change beforePath="$PROJECT_DIR$/client/src/mainGame/GameMain.java" afterPath="$PROJECT_DIR$/client/src/mainGame/GameMain.java" />
+      <change beforePath="$PROJECT_DIR$/client/src/mainGame/LoginController.java" afterPath="$PROJECT_DIR$/client/src/mainGame/LoginController.java" />
+      <change beforePath="$PROJECT_DIR$/client/src/mainGame/loginScene.fxml" afterPath="$PROJECT_DIR$/client/src/mainGame/loginScene.fxml" />
       <change beforePath="$PROJECT_DIR$/client/src/mainGame/mainscene.fxml" afterPath="$PROJECT_DIR$/client/src/mainGame/mainscene.fxml" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/client/client.jar" afterPath="$PROJECT_DIR$/out/artifacts/client/client.jar" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/client/client.jnlp" afterPath="$PROJECT_DIR$/out/artifacts/client/client.jnlp" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/server/server.jar" afterPath="$PROJECT_DIR$/out/artifacts/server/server.jar" />
+      <change beforePath="$PROJECT_DIR$/out/production/client/mainGame/ClientMain.class" afterPath="$PROJECT_DIR$/out/production/client/mainGame/ClientMain.class" />
+      <change beforePath="$PROJECT_DIR$/out/production/client/mainGame/FinishedController.class" afterPath="$PROJECT_DIR$/out/production/client/mainGame/FinishedController.class" />
+      <change beforePath="$PROJECT_DIR$/out/production/client/mainGame/GameController.class" afterPath="$PROJECT_DIR$/out/production/client/mainGame/GameController.class" />
+      <change beforePath="$PROJECT_DIR$/out/production/client/mainGame/GameMain.class" afterPath="$PROJECT_DIR$/out/production/client/mainGame/GameMain.class" />
+      <change beforePath="$PROJECT_DIR$/out/production/client/mainGame/LoginController.class" afterPath="$PROJECT_DIR$/out/production/client/mainGame/LoginController.class" />
+      <change beforePath="$PROJECT_DIR$/out/production/client/mainGame/loginScene.fxml" afterPath="$PROJECT_DIR$/out/production/client/mainGame/loginScene.fxml" />
+      <change beforePath="$PROJECT_DIR$/out/production/client/mainGame/mainscene.fxml" afterPath="$PROJECT_DIR$/out/production/client/mainGame/mainscene.fxml" />
+      <change beforePath="$PROJECT_DIR$/out/production/server/CheckersServer/NetworkUtil.class" afterPath="$PROJECT_DIR$/out/production/server/CheckersServer/NetworkUtil.class" />
+      <change beforePath="$PROJECT_DIR$/out/production/server/CheckersServer/Server.class" afterPath="$PROJECT_DIR$/out/production/server/CheckersServer/Server.class" />
+      <change beforePath="$PROJECT_DIR$/out/production/server/CheckersServer/ServerMain.class" afterPath="$PROJECT_DIR$/out/production/server/CheckersServer/ServerMain.class" />
+      <change beforePath="$PROJECT_DIR$/out/production/server/CheckersServer/UserId.class" afterPath="$PROJECT_DIR$/out/production/server/CheckersServer/UserId.class" />
+      <change beforePath="$PROJECT_DIR$/server/src/CheckersServer/Server.java" afterPath="$PROJECT_DIR$/server/src/CheckersServer/Server.java" />
+      <change beforePath="$PROJECT_DIR$/server/src/CheckersServer/ServerMain.java" afterPath="$PROJECT_DIR$/server/src/CheckersServer/ServerMain.java" />
       <change beforePath="$PROJECT_DIR$/users.txt" afterPath="$PROJECT_DIR$/users.txt" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -28,42 +53,38 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="GameMain.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/client/src/mainGame/GameMain.java">
+      <file leaf-file-name="users.txt" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/users.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="194">
-              <caret line="232" column="32" lean-forward="false" selection-start-line="232" selection-start-column="32" selection-end-line="232" selection-end-column="32" />
+            <state relative-caret-position="144">
+              <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Server.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/src/CheckersServer/Server.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1908">
+              <caret line="110" column="88" lean-forward="true" selection-start-line="110" selection-start-column="88" selection-end-line="110" selection-end-column="88" />
               <folding>
-                <element signature="n#!!doc;n#NONE#0;n#GameMain#0" expanded="true" />
-                <element signature="e#2934#2935#0" expanded="true" />
-                <element signature="e#2961#2962#0" expanded="true" />
-                <element signature="e#10978#10979#0" expanded="true" />
-                <element signature="e#11030#11031#0" expanded="true" />
-                <element signature="e#14896#14959#0" expanded="true" />
+                <element signature="docComment;class#Server#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="mainscene.fxml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/src/mainGame/mainscene.fxml">
+      <file leaf-file-name="GameMain.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/client/src/mainGame/GameMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="58" column="94" lean-forward="false" selection-start-line="58" selection-start-column="94" selection-end-line="58" selection-end-column="94" />
-              <folding />
-            </state>
-          </provider>
-          <provider editor-type-id="JavaFX-Scene-Builder">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GameController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/src/mainGame/GameController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="462">
-              <caret line="40" column="9" lean-forward="false" selection-start-line="40" selection-start-column="9" selection-end-line="40" selection-end-column="9" />
-              <folding />
+            <state relative-caret-position="198">
+              <caret line="175" column="20" lean-forward="true" selection-start-line="175" selection-start-column="20" selection-end-line="175" selection-end-column="20" />
+              <folding>
+                <element signature="docComment;class#GameMain#0" expanded="false" />
+                <element signature="e#2928#2929#0" expanded="true" />
+                <element signature="e#2955#2956#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -92,6 +113,21 @@
       <find>capture</find>
       <find>login</find>
       <find>saveFile</find>
+      <find>nameTi</find>
+      <find>circle</find>
+      <find>animationC</find>
+      <find>turn_</find>
+      <find>waiting</find>
+      <find>finished</find>
+      <find>Waitinf</find>
+      <find>tt.pla</find>
+      <find>anim</find>
+      <find>Circle</find>
+      <find>circ</find>
+      <find>setTex</find>
+      <find>setText</find>
+      <find>setVisi</find>
+      <find>setScene</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -112,31 +148,28 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/client/src/mainGame/finishedscene.fxml" />
-        <option value="$PROJECT_DIR$/client/src/mainGame/loginScene.fxml" />
         <option value="$PROJECT_DIR$/client/src/mainGame/LoginScene.java" />
         <option value="$PROJECT_DIR$/client/src/mainGame/Finishedscene.java" />
-        <option value="$PROJECT_DIR$/server/src/CheckersServer/ServerMain.java" />
         <option value="$PROJECT_DIR$/server/src/CheckersServer/UserId.java" />
         <option value="$PROJECT_DIR$/client/src/mainGame/historyscene.fxml" />
-        <option value="$PROJECT_DIR$/client/src/mainGame/GameController.java" />
-        <option value="$PROJECT_DIR$/client/src/mainGame/LoginController.java" />
         <option value="$PROJECT_DIR$/users.txt" />
+        <option value="$PROJECT_DIR$/src/sample/Main.java" />
+        <option value="$PROJECT_DIR$/client/src/mainGame/loginScene.fxml" />
+        <option value="$PROJECT_DIR$/client/src/mainGame/GameController.java" />
+        <option value="$PROJECT_DIR$/client/src/mainGame/FinishedController.java" />
+        <option value="$PROJECT_DIR$/server/src/CheckersServer/ServerMain.java" />
         <option value="$PROJECT_DIR$/server/src/CheckersServer/Server.java" />
-        <option value="$PROJECT_DIR$/client/src/mainGame/mainscene.fxml" />
+        <option value="$PROJECT_DIR$/client/src/mainGame/LoginController.java" />
         <option value="$PROJECT_DIR$/client/src/mainGame/GameMain.java" />
+        <option value="$PROJECT_DIR$/client/src/mainGame/mainscene.fxml" />
       </list>
     </option>
   </component>
-  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsGulpfileManager">
-    <detection-done>true</detection-done>
-    <sorting>DEFINITION_ORDER</sorting>
-  </component>
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="-7" />
-    <option name="width" value="778" />
-    <option name="height" value="745" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-1" />
+    <option name="y" value="-11" />
+    <option name="width" value="1368" />
+    <option name="height" value="780" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -160,47 +193,22 @@
               <item name="Network-Checkers" type="b2602c69:ProjectViewProjectNode" />
               <item name="Network-Checkers" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="Network-Checkers" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Network-Checkers" type="462c0819:PsiDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Network-Checkers" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Network-Checkers" type="462c0819:PsiDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Network-Checkers" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Network-Checkers" type="462c0819:PsiDirectoryNode" />
-              <item name="client" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="mainGame" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Network-Checkers" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Network-Checkers" type="462c0819:PsiDirectoryNode" />
-              <item name="server" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="settings.editor.selected.configurable" value="fileTemplates" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/Link to downloads/ChessHunt" />
+    <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.2" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="aspect.path.notification.shown" value="true" />
+    <property name="project.structure.side.proportion" value="0.0" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -367,7 +375,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1514289115280</updated>
-      <workItem from="1516800921310" duration="1980000" />
     </task>
     <task id="LOCAL-00001" summary="small bug fix in server">
       <created>1515511546657</created>
@@ -418,14 +425,39 @@
       <option name="project" value="LOCAL" />
       <updated>1516426574586</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="login signup track record system added">
+      <created>1516732490722</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1516732490722</updated>
+    </task>
+    <task id="LOCAL-00009" summary="animation imrpoved">
+      <created>1516815277287</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1516815277287</updated>
+    </task>
+    <task id="LOCAL-00010" summary="animation imrpoved">
+      <created>1516818784962</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1516818784962</updated>
+    </task>
+    <task id="LOCAL-00011" summary="animation imrpoved and bugs fixed">
+      <created>1516860545959</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1516860545959</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
-  <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1980000" />
-  </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="754" extended-state="7" />
+    <frame x="-1" y="-11" width="1368" height="780" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -434,32 +466,29 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12341772" sideWeight="0.50292826" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15615615" sideWeight="0.49707174" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32882884" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.61165047" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18154311" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13762811" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32882884" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Coverage" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329429" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
-  </component>
-  <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
@@ -468,34 +497,25 @@
     <MESSAGE value="small bug fix in server" />
     <MESSAGE value="piece capturing animation added and small bug fix in server" />
     <MESSAGE value="username added" />
-    <option name="LAST_COMMIT_MESSAGE" value="username added" />
+    <MESSAGE value="login signup track record system added" />
+    <MESSAGE value="animation imrpoved" />
+    <MESSAGE value="animation imrpoved and bugs fixed" />
+    <option name="LAST_COMMIT_MESSAGE" value="animation imrpoved and bugs fixed" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="2" />
+      <option name="time" value="4" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/client/src/mainGame/ClientMain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="21" column="31" lean-forward="true" selection-start-line="21" selection-start-column="31" selection-end-line="21" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/CheckersServer/ServerMain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="12" column="37" lean-forward="false" selection-start-line="12" selection-start-column="37" selection-end-line="12" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/server/src/CheckersServer/Server.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1206">
           <caret line="67" column="42" lean-forward="false" selection-start-line="67" selection-start-column="42" selection-end-line="67" selection-end-column="42" />
-          <folding />
+          <folding>
+            <element signature="docComment;class#Server#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -559,7 +579,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
           <caret line="7" column="60" lean-forward="false" selection-start-line="7" selection-start-column="60" selection-end-line="7" selection-end-column="60" />
-          <folding />
+          <folding>
+            <element signature="docComment;class#Server#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -568,12 +590,9 @@
         <state relative-caret-position="288">
           <caret line="72" column="43" lean-forward="false" selection-start-line="72" selection-start-column="43" selection-end-line="72" selection-end-column="43" />
           <folding>
-            <element signature="n#!!doc;n#NONE#0;n#GameMain#0" expanded="true" />
-            <element signature="e#2934#2935#0" expanded="true" />
-            <element signature="e#2961#2962#0" expanded="true" />
-            <element signature="e#10978#10979#0" expanded="true" />
-            <element signature="e#11030#11031#0" expanded="true" />
-            <element signature="e#14896#14959#0" expanded="true" />
+            <element signature="docComment;class#GameMain#0" expanded="false" />
+            <element signature="e#2928#2929#0" expanded="true" />
+            <element signature="e#2955#2956#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -596,7 +615,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
           <caret line="18" column="44" lean-forward="false" selection-start-line="18" selection-start-column="44" selection-end-line="18" selection-end-column="44" />
-          <folding />
+          <folding>
+            <element signature="docComment;class#Server#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -612,12 +633,9 @@
         <state relative-caret-position="1278">
           <caret line="71" column="4" lean-forward="true" selection-start-line="71" selection-start-column="4" selection-end-line="71" selection-end-column="4" />
           <folding>
-            <element signature="n#!!doc;n#NONE#0;n#GameMain#0" expanded="true" />
-            <element signature="e#2934#2935#0" expanded="true" />
-            <element signature="e#2961#2962#0" expanded="true" />
-            <element signature="e#10978#10979#0" expanded="true" />
-            <element signature="e#11030#11031#0" expanded="true" />
-            <element signature="e#14896#14959#0" expanded="true" />
+            <element signature="docComment;class#GameMain#0" expanded="false" />
+            <element signature="e#2928#2929#0" expanded="true" />
+            <element signature="e#2955#2956#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -633,7 +651,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
           <caret line="18" column="44" lean-forward="false" selection-start-line="18" selection-start-column="44" selection-end-line="18" selection-end-column="44" />
-          <folding />
+          <folding>
+            <element signature="docComment;class#Server#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -642,12 +662,9 @@
         <state relative-caret-position="1080">
           <caret line="60" column="5" lean-forward="true" selection-start-line="60" selection-start-column="5" selection-end-line="60" selection-end-column="5" />
           <folding>
-            <element signature="n#!!doc;n#NONE#0;n#GameMain#0" expanded="true" />
-            <element signature="e#2934#2935#0" expanded="true" />
-            <element signature="e#2961#2962#0" expanded="true" />
-            <element signature="e#10978#10979#0" expanded="true" />
-            <element signature="e#11030#11031#0" expanded="true" />
-            <element signature="e#14896#14959#0" expanded="true" />
+            <element signature="docComment;class#GameMain#0" expanded="false" />
+            <element signature="e#2928#2929#0" expanded="true" />
+            <element signature="e#2955#2956#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -671,12 +688,9 @@
         <state relative-caret-position="918">
           <caret line="97" column="60" lean-forward="true" selection-start-line="97" selection-start-column="60" selection-end-line="97" selection-end-column="60" />
           <folding>
-            <element signature="n#!!doc;n#NONE#0;n#GameMain#0" expanded="true" />
-            <element signature="e#2934#2935#0" expanded="true" />
-            <element signature="e#2961#2962#0" expanded="true" />
-            <element signature="e#10978#10979#0" expanded="true" />
-            <element signature="e#11030#11031#0" expanded="true" />
-            <element signature="e#14896#14959#0" expanded="true" />
+            <element signature="docComment;class#GameMain#0" expanded="false" />
+            <element signature="e#2928#2929#0" expanded="true" />
+            <element signature="e#2955#2956#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -692,7 +706,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1170">
           <caret line="67" column="42" lean-forward="true" selection-start-line="67" selection-start-column="42" selection-end-line="67" selection-end-column="42" />
-          <folding />
+          <folding>
+            <element signature="docComment;class#Server#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -714,7 +730,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1170">
           <caret line="67" column="42" lean-forward="true" selection-start-line="67" selection-start-column="42" selection-end-line="67" selection-end-column="42" />
-          <folding />
+          <folding>
+            <element signature="docComment;class#Server#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -736,7 +754,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1206">
           <caret line="67" column="42" lean-forward="false" selection-start-line="67" selection-start-column="42" selection-end-line="67" selection-end-column="42" />
-          <folding />
+          <folding>
+            <element signature="docComment;class#Server#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -766,37 +786,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server/src/TrackRecord.java" />
-    <entry file="file://$PROJECT_DIR$/client/src/mainGame/FinishedController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="17" column="36" lean-forward="true" selection-start-line="17" selection-start-column="36" selection-end-line="17" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/mainGame/loginScene.fxml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="8" column="108" lean-forward="false" selection-start-line="8" selection-start-column="104" selection-end-line="8" selection-end-column="108" />
-        </state>
-      </provider>
-      <provider editor-type-id="JavaFX-Scene-Builder">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/CheckersServer/ServerMain.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="21" column="11" lean-forward="true" selection-start-line="21" selection-start-column="11" selection-end-line="21" selection-end-column="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/CheckersServer/UserId.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-243">
-          <caret line="22" column="33" lean-forward="true" selection-start-line="22" selection-start-column="33" selection-end-line="22" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/Downloads/Link to downloads/jdk1.8.0_152/src.zip!/java/lang/Thread.java" />
     <entry file="file://$PROJECT_DIR$/client/src/mainGame/historyscene.fxml">
       <provider selected="true" editor-type-id="text-editor">
@@ -808,57 +797,107 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/mainGame/LoginController.java">
+    <entry file="file://$PROJECT_DIR$/server/src/CheckersServer/UserId.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="363">
-          <caret line="28" column="0" lean-forward="true" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+        <state relative-caret-position="252">
+          <caret line="16" column="5" lean-forward="true" selection-start-line="16" selection-start-column="5" selection-end-line="16" selection-end-column="5" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/src/CheckersServer/Server.java">
+    <entry file="file://$PROJECT_DIR$/server/src/users.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="15" column="13" lean-forward="true" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
-          <folding />
+        <state relative-caret-position="144">
+          <caret line="8" column="0" lean-forward="true" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://C:/Program Files/Java/jdk-9.0.1/lib/src.zip!/javafx.fxml/javafx/fxml/FXMLLoader.java">
+    <entry file="file://$PROJECT_DIR$/src/sample/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="134">
-          <caret line="2624" column="0" lean-forward="false" selection-start-line="2624" selection-start-column="0" selection-end-line="2624" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="270">
+          <caret line="15" column="49" lean-forward="true" selection-start-line="15" selection-start-column="49" selection-end-line="15" selection-end-column="49" />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/mainGame/loginScene.fxml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="15" column="0" lean-forward="true" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+        </state>
+      </provider>
+      <provider editor-type-id="JavaFX-Scene-Builder">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/client/src/mainGame/ClientMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
+        <state relative-caret-position="270">
           <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/CheckersServer/NetworkUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="24" column="4" lean-forward="false" selection-start-line="24" selection-start-column="4" selection-end-line="24" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/CheckersServer/ServerMain.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="28" lean-forward="true" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="28" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/client/src/mainGame/GameController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="462">
-          <caret line="40" column="9" lean-forward="false" selection-start-line="40" selection-start-column="9" selection-end-line="40" selection-end-column="9" />
+        <state relative-caret-position="162">
+          <caret line="18" column="35" lean-forward="true" selection-start-line="18" selection-start-column="35" selection-end-line="18" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/mainGame/FinishedController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="43" lean-forward="true" selection-start-line="18" selection-start-column="43" selection-end-line="18" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/mainGame/LoginController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="11" column="45" lean-forward="false" selection-start-line="11" selection-start-column="45" selection-end-line="11" selection-end-column="45" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/users.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
+        <state relative-caret-position="144">
           <caret line="8" column="0" lean-forward="false" selection-start-line="8" selection-start-column="0" selection-end-line="8" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/server/src/CheckersServer/Server.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1908">
+          <caret line="110" column="88" lean-forward="true" selection-start-line="110" selection-start-column="88" selection-end-line="110" selection-end-column="88" />
+          <folding>
+            <element signature="docComment;class#Server#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/client/src/mainGame/mainscene.fxml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="58" column="94" lean-forward="false" selection-start-line="58" selection-start-column="94" selection-end-line="58" selection-end-column="94" />
+        <state relative-caret-position="198">
+          <caret line="11" column="35" lean-forward="false" selection-start-line="11" selection-start-column="35" selection-end-line="11" selection-end-column="35" />
           <folding />
         </state>
       </provider>
@@ -868,15 +907,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/client/src/mainGame/GameMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="232" column="32" lean-forward="false" selection-start-line="232" selection-start-column="32" selection-end-line="232" selection-end-column="32" />
+        <state relative-caret-position="198">
+          <caret line="175" column="20" lean-forward="true" selection-start-line="175" selection-start-column="20" selection-end-line="175" selection-end-column="20" />
           <folding>
-            <element signature="n#!!doc;n#NONE#0;n#GameMain#0" expanded="true" />
-            <element signature="e#2934#2935#0" expanded="true" />
-            <element signature="e#2961#2962#0" expanded="true" />
-            <element signature="e#10978#10979#0" expanded="true" />
-            <element signature="e#11030#11031#0" expanded="true" />
-            <element signature="e#14896#14959#0" expanded="true" />
+            <element signature="docComment;class#GameMain#0" expanded="false" />
+            <element signature="e#2928#2929#0" expanded="true" />
+            <element signature="e#2955#2956#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -923,7 +959,7 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-          <last-edited>9.0</last-edited>
+          <last-edited>1.8.0_152</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -940,6 +976,7 @@
             <option name="proportions">
               <list>
                 <option value="0.2" />
+                <option value="0.6" />
               </list>
             </option>
           </splitter-proportions>

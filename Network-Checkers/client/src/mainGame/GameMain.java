@@ -4,16 +4,17 @@ import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
@@ -39,8 +40,7 @@ public class GameMain extends Application {
 	private ObjectOutputStream out_server;
 	private boolean singlePlayer = false;
 	private boolean jumpOnly = false, signIn = true;
-	private Text turn_text, name, nameTitle, opponent, opponetTitle;
-	private Circle animationCircle;
+	private Text turn_text, name, nameTitle, opponent, opponentTitle;
 	private GridPane checkerboard;
 	private VBox whitebox, blackbox;
 	private final byte GRID_BASEX = 5, GRID_BASEY = 65, GRID_DIMENSION = 60;
@@ -55,7 +55,7 @@ public class GameMain extends Application {
 	private final Image black_king = new Image ("images/chips_black_king.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
 	private final Image bg_black = new Image ("images/bg_black.png", GRID_DIMENSION, GRID_DIMENSION, false, true, true);
 	private final Image bg_white = new Image ("images/bg_white.png", GRID_DIMENSION, GRID_DIMENSION, false, true, true);
-	private byte next = WHITE, this_player = WHITE;
+	private byte next = WHITE, this_player;
 	private byte whitePieces = 12, blackPieces = 12;
 	private byte dircol[]={1, -1, 1, -1}, dirrow[] = {-1, -1, 1, 1};
 	private boolean selected = false;
@@ -64,7 +64,7 @@ public class GameMain extends Application {
 	
 	
 	//<editor-fold defaultstate="collapsed" desc="Finished for now">
-	public GameMain (byte player) {
+	GameMain (byte player) {
 		this_player = player;
 	}
 	
@@ -132,7 +132,7 @@ public class GameMain extends Application {
 		signIn = true;
 		itsGamesPlyed = 0;
 		itsGamesWon = 0;
-		if (selected) {
+		if (selected && grid[selectedRow][selectedCol].getChildren ().size ()>2) {
 			grid[selectedRow][selectedCol].getChildren ().remove (2);
 		}
 		for (byte col = 0; col<8; col++) {
@@ -155,7 +155,6 @@ public class GameMain extends Application {
 			}
 		}
 	}
-	//</editor-fold>
 	
 	private void captureAnimation (byte row, byte col, byte state) {
 		if (blackPieces+whitePieces<24) checkerboard.getChildren ().remove (64);
@@ -169,21 +168,31 @@ public class GameMain extends Application {
 		TranslateTransition tt = new TranslateTransition(Duration.millis(400), capturedPiece);
 		tt.setToX (600);
 		tt.play();
-		Circle circle = new Circle (1, 1, 10, Color.TRANSPARENT);
-		(state == BLACK || state == BLACK_KING ? blackbox : whitebox).getChildren ().add (circle);
-		circle = new Circle (1, 1, 10,(state == BLACK || state == BLACK_KING ? Color.BLACK : Color.WHEAT));
-		(state == BLACK || state == BLACK_KING ? blackbox : whitebox).getChildren ().add (circle);
+		ImageView imageView = new ImageView (checker_images[state]);
+		imageView.setFitHeight (40);
+		imageView.setFitWidth (40);
+		(state == BLACK || state == BLACK_KING ? blackbox : whitebox).getChildren ().add (imageView);
 	}
+	//</editor-fold>
 	
 	
 	
 	private void showLogin () {
 		dialog = new Stage();
+		FXMLLoader loader = new FXMLLoader (getClass ().getResource ("loginScene.fxml"));
+		try {
+			dialog.setScene (new Scene (loader.load ()));
+		} catch (IOException e) {
+			e.printStackTrace ();
+		}
+		LoginController controller = loader.getController ();
 		dialog.initModality(Modality.APPLICATION_MODAL);
 		dialog.initOwner(game_window);
-		set_scene (dialog, "loginScene.fxml");
 		dialog.setOnCloseRequest (event -> System.exit (1));
 		dialog.show();
+		controller.user.requestFocus ();
+		controller.signinButton.defaultButtonProperty ().bind (controller.signinButton.focusedProperty ());
+		controller.signupButton.defaultButtonProperty ().bind (controller.signupButton.focusedProperty ());
 	}
 	
 	void signup () {
@@ -228,18 +237,13 @@ public class GameMain extends Application {
 					dialog.hide ();
 					game_window.show ();
 				});
+				StackPane rootpane = (StackPane) game_scene.lookup ("#rootpane");
+				ProgressIndicator pi = new ProgressIndicator ();
+				pi.setMinSize (200, 200);
+				VBox box = new VBox (pi);
+				box.setAlignment (Pos.CENTER);
+				Platform.runLater (()->rootpane.getChildren ().add (box));
 				while (true) {
-					TranslateTransition tt = new TranslateTransition(Duration.millis(500),animationCircle);
-					tt.setToY(400);
-					tt.setAutoReverse(true);
-					tt.setCycleCount(TranslateTransition.INDEFINITE);
-					tt.play();
-					if((turn_text.getText().compareTo("Waiting for opponent")) != 0)
-					{
-						nameTitle.setVisible(true);
-						opponetTitle.setVisible(true);
-						animationCircle.setVisible(false);
-					}
 					s = (String) in_server.readObject ();
 					st = new StringTokenizer (s);
 					if (s.startsWith ("index")) {
@@ -254,8 +258,13 @@ public class GameMain extends Application {
 						blackName = os[2];
 						if ((itsIndex&1) == 0) {
 							this_player = WHITE;
+							turn_text.setText (whiteName+" (White)'s turn");
+							nameTitle.setVisible(true);
+							opponentTitle.setVisible(true);
+							name.setVisible(true);
+							opponent.setVisible(true);
 							Platform.runLater (() -> {
-								turn_text.setText (whiteName+" (White)'s turn");
+								rootpane.getChildren ().remove (box);
 								for (int row = 0; row<8; row++) {
 									for (int col = 0; col<8; col++) {
 										checkerboard.add (grid[row][col], col, row);
@@ -265,8 +274,13 @@ public class GameMain extends Application {
 						}
 						else {
 							this_player = BLACK;
+							turn_text.setText (whiteName+" (White)'s turn");
+							nameTitle.setVisible(true);
+							opponentTitle.setVisible(true);
+							name.setVisible(true);
+							opponent.setVisible(true);
 							Platform.runLater (() -> {
-								turn_text.setText (whiteName+" (White)'s turn");
+								rootpane.getChildren ().remove (box);
 								for (int row = 0; row<8; row++) {
 									for (int col = 0; col<8; col++) {
 										checkerboard.add (grid[row][col], 7-col, 7-row);
@@ -279,17 +293,13 @@ public class GameMain extends Application {
 						if (next == this_player) {
 							changeNext ();
 						}
-						Platform.runLater(() -> {
-							finish ();
-						});
+						Platform.runLater(() -> finish ());
 						out_server.writeObject ("win");
 					}
 					else {
 						final byte _a = Byte.parseByte (st.nextToken ()), _b = Byte.parseByte (st.nextToken ());
 						System.out.println (_a+" "+_b);
-						Platform.runLater(() -> {
-							click (_a, _b);
-						});
+						Platform.runLater(() -> click (_a, _b));
 					}
 					if (this_player == WHITE) {
 						name.setText(whiteName);
@@ -311,13 +321,16 @@ public class GameMain extends Application {
 				whiteName = blackName = playerName;
 				name.setText(whiteName);
 				nameTitle.setVisible(true);
+				name.setVisible(true);
+				turn_text.setText (whiteName+" (White)'s turn");
 				Platform.runLater (()->{
-					turn_text.setText (whiteName+" (White)'s turn");
 					for (int row = 0; row<8; row++) {
 						for (int col = 0; col<8; col++) {
-							checkerboard.add (grid[row][col], col, row);/*else show waiting*/
+							checkerboard.add (grid[row][col], col, row);
 						}
 					}
+					dialog.hide ();
+					game_window.show ();
 				});
 				System.out.println ("No more communicating with server as an offline game");
 				Thread.currentThread ().interrupt ();
@@ -379,7 +392,7 @@ public class GameMain extends Application {
 			next = WHITE;
 			turn_text.setText (whiteName+" (White)'s turn");
 		}
-		if (mate () && (singlePlayer || this_player==next)) {
+		if (mate () && (singlePlayer || this_player == next)) {
 			surrender ();
 		}
 	}
@@ -504,12 +517,13 @@ public class GameMain extends Application {
 		turn_text = (Text) game_scene.lookup ("#turn");
 		name = (Text) game_scene.lookup("#name");
 		opponent = (Text) game_scene.lookup("#opponentName");
-		opponetTitle = (Text) game_scene.lookup("#opponentTitle");
+		opponentTitle = (Text) game_scene.lookup("#opponentTitle");
 		nameTitle = (Text) game_scene.lookup("#nameTitle");
-		animationCircle = (Circle) game_scene.lookup("#animationCircle");
-		opponetTitle.setVisible(false);
+		opponentTitle.setVisible(false);
 		nameTitle.setVisible(false);
-		turn_text.setText ("Waiting for opponent");
+		name.setVisible (false);
+		opponent.setVisible (false);
+		turn_text.setText ("Waiting for opponent...");
 		checkerboard = (GridPane) game_scene.lookup ("#checkerBoard");
 		whitebox = (VBox) game_scene.lookup ("#whitebox");
 		blackbox = (VBox) game_scene.lookup ("#blackbox");

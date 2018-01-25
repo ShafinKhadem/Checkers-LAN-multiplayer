@@ -5,6 +5,10 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * @author Nafiur Rahman Khadem
+ */
+
 public class Server extends Thread {
 	private ArrayList<NetworkUtil> ncs = new ArrayList<> ();
 	private ArrayList<UserId> userIds = new ArrayList<> ();
@@ -14,7 +18,7 @@ public class Server extends Thread {
 	
 	private void readFile () {
 		try {
-			BufferedReader br = null;
+			BufferedReader br;
 			try {
 				br = new BufferedReader (new FileReader (FILE_NAME));
 			} catch (FileNotFoundException e) {
@@ -36,13 +40,10 @@ public class Server extends Thread {
 	}
 	
 	void saveFile () {
-		try {
-			BufferedWriter bw = new BufferedWriter(new FileWriter (FILE_NAME));
-			int sz = userIds.size ();
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter (FILE_NAME))) {
 			for (UserId userId : userIds) {
 				bw.write (userId.getUsername ()+" "+userId.getPassword ()+" "+userId.getGamesPlayed ()+" "+userId.getGamesWon ()+"\n");
 			}
-			bw.close();
 		} catch (Exception e) {
 			e.printStackTrace (System.out);
 		}
@@ -92,16 +93,22 @@ public class Server extends Thread {
 									}
 								}
 								if (unique) {
+									idxUserIds = userIds.size ();
 									userIds.add (new UserId (os[2], os[3]));
 								}
-							}
-							idxUserIds = userIds.indexOf (new UserId (os[2], os[3]));
-							if (idxUserIds == -1) {
-								_nc.write ("invalid");
+								else {
+									_nc.write ("invalid");
+								}
 							}
 							else {
+								idxUserIds = userIds.indexOf (new UserId (os[2], os[3]));
+								if (idxUserIds == -1) {
+									_nc.write ("invalid");
+								}
+							}
+							if (idxUserIds != -1) {
 								thisUser = userIds.get (idxUserIds);
-								_nc.write ((String)("valid "+thisUser.getGamesPlayed ()+" "+thisUser.getGamesWon ()));
+								_nc.write ("valid "+thisUser.getGamesPlayed ()+" "+thisUser.getGamesWon ());
 								thisUser.setGamesPlayed (thisUser.getGamesPlayed ()+1);
 								ncs.add (_nc);
 								int indexNcs = (ncs.size ()-1);

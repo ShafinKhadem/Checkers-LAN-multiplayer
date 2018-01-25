@@ -1,16 +1,13 @@
 package mainGame;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;
 
 public class FinishedController {
-	@FXML
-	private Text win;
 	public Text result;
 	
 	@FXML
-	void rstrt(ActionEvent event) {
+	void rstrt () {
 		ClientMain.game.dialog.hide ();
 		ClientMain.game.game_window.hide ();
 		ClientMain.game.reset ();
@@ -24,7 +21,7 @@ public class FinishedController {
 	}
 	
 	@FXML
-	void quit (ActionEvent event) {
+	void quit () {
 		System.exit (0);
 	}
 }

@@ -2,12 +2,16 @@ package mainGame;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 public class LoginController {
+	public TextField user;
+	public Button signinButton, signupButton;
 	@FXML
-	private TextField user, password;
+	private PasswordField password;
 	@FXML
 	private Text win, result;
 	

@@ -1,10 +1,11 @@
 package mainGame;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -12,21 +13,23 @@ import java.io.IOException;
 
 public class GameController {
 	@FXML
+	public StackPane rootpane;
 	public GridPane checkerBoard;
-	public Text turn;
+	public Text turn, nameTitle, opponentTitle, name, opponentName;
+	public VBox whitebox, blackbox;
 	
 	@FXML
-	void help(ActionEvent event) {
+	void help () {
 		ClientMain.game.showHelp ();
 	}
 	
 	@FXML
-	void surrender(ActionEvent event){
+	void surrender (){
 		ClientMain.game.surrender ();
 	}
 	
 	@FXML
-	void showHistory (ActionEvent actionEvent) {
+	void showHistory () {
 		Stage history = new Stage ();
 		try {
 			Scene historyscene = new Scene (FXMLLoader.load (GameMain.class.getResource ("historyscene.fxml")));
