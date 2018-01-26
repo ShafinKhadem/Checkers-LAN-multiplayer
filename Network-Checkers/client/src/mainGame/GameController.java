@@ -36,7 +36,7 @@ public class GameController {
 			history.setScene (historyscene);
 			Text played = (Text) historyscene.lookup ("#played");
 			Text won = (Text) historyscene.lookup ("#won");
-			played.setText (Integer.toString (GameMain.itsGamesPlyed));
+			played.setText (Integer.toString (GameMain.itsGamesPlayed));
 			won.setText (Integer.toString (GameMain.itsGamesWon));
 		} catch (IOException e) {
 			System.out.println ("fxml file could not be loaded");

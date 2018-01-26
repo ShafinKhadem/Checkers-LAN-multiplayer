@@ -30,24 +30,23 @@ import java.util.StringTokenizer;
  */
 
 public class GameMain extends Application {
-	//<editor-fold defaultstate="collapsed" desc="variable declarations">
-	static final byte NONE = 0, WHITE = 1, BLACK = 2, WHITE_KING = 3, BLACK_KING = 4, MOVE = 5, JUMP = 6;
-	static String whiteName = "", blackName = "", playerName="anonymous", passWord = "";
-	static int itsIndex, itsGamesPlyed = 0, itsGamesWon = 0;
+	//<editor-fold defaultstate="collapsed" desc="Declarations">
+	private static final byte NONE = 0, WHITE = 1, BLACK = 2, WHITE_KING = 3, BLACK_KING = 4, MOVE = 5, JUMP = 6;
+	private static String whiteName, blackName, playerName, passWord;
+	static int itsIndex, itsGamesPlayed, itsGamesWon;
 	Stage game_window, dialog;
 	private Scene game_scene, scene;
 	private ObjectInputStream in_server;
 	private ObjectOutputStream out_server;
-	private boolean singlePlayer = false;
-	private boolean jumpOnly = false, signIn = true;
+	private boolean jumpOnly, signIn, selected, singlePlayer;
 	private Text turn_text, name, nameTitle, opponent, opponentTitle;
 	private GridPane checkerboard;
 	private VBox whitebox, blackbox;
-	private final byte GRID_BASEX = 5, GRID_BASEY = 65, GRID_DIMENSION = 60;
 	private StackPane[][] grid = new StackPane[10][10];
+	private final byte /*GRID_BASEX = 5, GRID_BASEY = 65, */GRID_DIMENSION = 60, dircol[]={1, -1, 1, -1}, dirrow[] = {-1, -1, 1, 1};
 	private byte[][] state = new byte[10][10];
 	private byte[][] valid_to = new byte[10][10];//move and jump ke alada korar jonyo
-	private byte selectedRow, selectedCol;
+	private byte selectedRow, selectedCol, next, this_player, whitePieces, blackPieces;
 	private Image[] checker_images = new Image[10];
 	private final Image white_piece = new Image ("images/chips_white.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
 	private final Image black_piece = new Image ("images/chips_black.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
@@ -55,17 +54,13 @@ public class GameMain extends Application {
 	private final Image black_king = new Image ("images/chips_black_king.png", GRID_DIMENSION, GRID_DIMENSION, true, true, true);
 	private final Image bg_black = new Image ("images/bg_black.png", GRID_DIMENSION, GRID_DIMENSION, false, true, true);
 	private final Image bg_white = new Image ("images/bg_white.png", GRID_DIMENSION, GRID_DIMENSION, false, true, true);
-	private byte next = WHITE, this_player;
-	private byte whitePieces = 12, blackPieces = 12;
-	private byte dircol[]={1, -1, 1, -1}, dirrow[] = {-1, -1, 1, 1};
-	private boolean selected = false;
 	//</editor-fold>
 	
 	
 	
-	//<editor-fold defaultstate="collapsed" desc="Finished for now">
-	GameMain (byte player) {
-		this_player = player;
+	//<editor-fold defaultstate="collapsed" desc="Gameplay logics and helper functions">
+	GameMain () {
+		this_player = WHITE;
 	}
 	
 	private void set_scene (Stage window, String sceneFile) {
@@ -127,20 +122,35 @@ public class GameMain extends Application {
 	}
 	
 	void reset () {
-		whitePieces = 12;
-		blackPieces = 12;
+		//<editor-fold defaultstate="collapsed" desc="initializations">
+		checker_images[WHITE] = white_piece;
+		checker_images[BLACK] = black_piece;
+		checker_images[WHITE_KING] = white_king;
+		checker_images[BLACK_KING] = black_king;
+		next = WHITE;
+		whiteName = playerName = blackName = passWord = "";
+		itsGamesPlayed = itsGamesWon = 0;
+		whitePieces = blackPieces = 12;
+		jumpOnly = selected = singlePlayer = false;
 		signIn = true;
-		itsGamesPlyed = 0;
-		itsGamesWon = 0;
-		if (selected && grid[selectedRow][selectedCol].getChildren ().size ()>2) {
-			grid[selectedRow][selectedCol].getChildren ().remove (2);
-		}
+		turn_text = (Text) game_scene.lookup ("#turn");
+		name = (Text) game_scene.lookup("#name");
+		opponent = (Text) game_scene.lookup("#opponentName");
+		opponentTitle = (Text) game_scene.lookup("#opponentTitle");
+		nameTitle = (Text) game_scene.lookup("#nameTitle");
+		opponentTitle.setVisible(false);
+		nameTitle.setVisible(false);
+		name.setVisible (false);
+		opponent.setVisible (false);
+		turn_text.setText ("Waiting for opponent...");
+		checkerboard = (GridPane) game_scene.lookup ("#checkerBoard");
+		whitebox = (VBox) game_scene.lookup ("#whitebox");
+		blackbox = (VBox) game_scene.lookup ("#blackbox");
+		//</editor-fold>\
 		for (byte col = 0; col<8; col++) {
 			for (byte row = 0; row<8; row++) {
-				if (state[row][col] != NONE) {
-					grid[row][col].getChildren ().remove (1);
-					state[row][col] = NONE;
-				}
+				valid_to[row][col] = NONE;
+				state[row][col] = NONE;
 				if (((row+col)&1) != 0) {
 					if (row >= 5) {
 						state[row][col] = WHITE;
@@ -173,6 +183,178 @@ public class GameMain extends Application {
 		imageView.setFitWidth (40);
 		(state == BLACK || state == BLACK_KING ? blackbox : whitebox).getChildren ().add (imageView);
 	}
+	private void select_cell (byte row, byte col) {
+		Rectangle rectangle = new Rectangle (55, 55, Color.TRANSPARENT);
+		rectangle.setStroke (Color.GREEN);
+		rectangle.setStrokeWidth (5);
+		grid[row][col].getChildren ().add (rectangle);
+		selectedRow = row;
+		selectedCol = col;
+		selected = true;
+	}
+	
+	private boolean valid_index (byte row, byte col) {
+		return row >= 0 && row<8 && col >= 0 && col<8;
+	}
+	
+	private void reset_validTo () {
+		for (int row = 0; row<8; row++) {
+			for (int col = 0; col<8; col++) {
+				valid_to[row][col] = NONE;
+				if (state[row][col] == NONE && grid[row][col].getChildren ().size ()>1) {
+					grid[row][col].getChildren ().remove (1);
+				}
+			}
+		}
+	}
+	
+	
+	private boolean mate () {
+		for (byte row = 0; row<8; row++) {
+			for (byte col = 0; col<8; col++) {
+				if ((state[row][col] == next || state[row][col] == next+2) && set_valids (row, col)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	private void changeNext(){
+		if (next == WHITE) {
+			next = BLACK;
+			turn_text.setText (blackName+" (Black)'s turn");
+		}
+		else if (next== BLACK) {
+			next = WHITE;
+			turn_text.setText (whiteName+" (White)'s turn");
+		}
+		if (mate () && (singlePlayer || this_player == next)) {
+			surrender ();
+		}
+	}
+	
+	private boolean set_valids (byte row, byte col) {
+		byte strt = 0, nd = 2, stt = state[row][col];//strt and nd by default (for white)
+		if (stt == WHITE_KING || stt == BLACK_KING) {
+			nd = 4;
+		}
+		else if (stt == BLACK) {
+			strt = 2;
+			nd = 4;
+		}
+		boolean flg_jmp = false, flg_mv = false;
+		for (byte i = strt; i<nd; i++) {
+			byte trgtrow = (byte) (row+dirrow[i]), trgtcol = (byte) (col+dircol[i]), trgtstt;
+			if (!valid_index (trgtrow, trgtcol)) {
+				continue;
+			}
+			trgtstt = state[trgtrow][trgtcol];
+			if (!jumpOnly && trgtstt == NONE) {
+				valid_to[trgtrow][trgtcol] = MOVE;
+				flg_mv = true;
+			}
+			else {
+				byte trgtrow2 = (byte) (trgtrow+dirrow[i]), trgtcol2 = (byte) (trgtcol+dircol[i]);
+				boolean vld_jmp = (valid_index (trgtrow2, trgtcol2) && state[trgtrow2][trgtcol2] == NONE);
+				if (vld_jmp) {
+					if ((stt == BLACK || stt == BLACK_KING) && (trgtstt == WHITE || trgtstt== WHITE_KING)) {
+						valid_to[trgtrow2][trgtcol2] = JUMP;
+						flg_jmp = true;
+					} else if ((stt == WHITE || stt == WHITE_KING) && (trgtstt == BLACK || trgtstt== BLACK_KING)) {
+						valid_to[trgtrow2][trgtcol2] = JUMP;
+						flg_jmp = true;
+					}
+				}
+			}
+		}
+		if (jumpOnly && !flg_jmp) {
+			jumpOnly = false;
+			changeNext ();
+		}
+		else if (jumpOnly) {
+			select_cell (selectedRow, selectedCol);
+			showPossibleMoves ();
+		}
+		return flg_jmp || flg_mv;
+	}
+	
+	private void showPossibleMoves () {
+		for (int row = 0; row<8; row++) {
+			for (int col = 0; col<8; col++) {
+				if (valid_to[row][col] != NONE) {
+					Rectangle rectangle = new Rectangle (55, 55, Color.TRANSPARENT);
+					rectangle.setStroke (Color.YELLOW);
+					rectangle.setStrokeWidth (5);
+					grid[row][col].getChildren ().add (rectangle);
+				}
+			}
+		}
+	}
+	
+	private void move (byte toRow, byte toCol) {
+		reset_validTo ();
+		grid[selectedRow][selectedCol].getChildren ().remove (1, 3);
+		if (state[selectedRow][selectedCol] == WHITE && toRow == 0) {
+			state[selectedRow][selectedCol] = WHITE_KING;
+		} else if (state[selectedRow][selectedCol] == BLACK && toRow == 7) {
+			state[selectedRow][selectedCol] = BLACK_KING;
+		}
+		add_piece (toRow, toCol, state[selectedRow][selectedCol]);
+		state[toRow][toCol] = state[selectedRow][selectedCol];
+		state[selectedRow][selectedCol] = NONE;
+		selected = false;
+		if (Math.abs (toRow-selectedRow)>1) {
+			byte removeRow = (byte) ((selectedRow+toRow)/2), removeCol = (byte) ((selectedCol+toCol)/2);
+			grid[removeRow][removeCol].getChildren ().remove (1);
+			captureAnimation (removeRow, removeCol, state[removeRow][removeCol]);
+			state[removeRow][removeCol] = NONE;
+			if (next == WHITE) {
+				blackPieces--;
+				if (blackPieces == 0) {
+					changeNext ();
+//					finish ();
+				}
+			} else if (next == BLACK) {
+				whitePieces--;
+				if (whitePieces == 0) {
+					changeNext ();
+//					finish ();
+				}
+			}
+			reset_validTo ();
+			jumpOnly = true;
+			selectedRow = toRow;
+			selectedCol = toCol;
+			set_valids (toRow, toCol);
+		}
+		else {
+			changeNext ();
+		}
+	}
+	
+	private void click(byte _row, byte _col){
+		if (selected) {
+			if (valid_to[_row][_col] != NONE) {
+				move (_row, _col);
+			}
+			else if (state[_row][_col] == next || state[_row][_col] == next+2) {
+				reset_validTo ();
+				grid[selectedRow][selectedCol].getChildren ().remove (2);
+				select_cell (_row, _col);
+				set_valids (_row, _col);
+				showPossibleMoves ();
+			}
+		}
+		else {
+			if (state[_row][_col] == next || state[_row][_col] == next+2) {
+				reset_validTo ();
+				select_cell (_row, _col);
+				set_valids (_row, _col);
+				showPossibleMoves ();
+			}
+		}
+	}
 	//</editor-fold>
 	
 	
@@ -195,13 +377,16 @@ public class GameMain extends Application {
 		controller.signupButton.defaultButtonProperty ().bind (controller.signupButton.focusedProperty ());
 	}
 	
-	void signup () {
+	void signup (String usr, String pswrd) {
 		signIn = false;
-		login ();
+		login (usr, pswrd);
 	}
 	
-	void login () {
-		new Thread(() -> {
+	void login (String usr, String pswrd) {
+		playerName = usr;
+		passWord = pswrd;
+		System.out.println ("Entered name: "+GameMain.playerName+" password: "+GameMain.passWord);
+		new Thread (() -> {
 			try {
 				Socket socket = new Socket ("127.0.0.1", 33333);
 				in_server = new ObjectInputStream (socket.getInputStream());
@@ -231,7 +416,7 @@ public class GameMain extends Application {
 					s = (String) in_server.readObject ();
 				}
 				String[] os = s.split (" ");
-				itsGamesPlyed = Integer.parseInt (os[1]);
+				itsGamesPlayed = Integer.parseInt (os[1]);
 				itsGamesWon = Integer.parseInt (os[2]);
 				Platform.runLater (()->{
 					dialog.hide ();
@@ -348,186 +533,11 @@ public class GameMain extends Application {
 		}).start ();
 	}
 	
-	//<editor-fold defaultstate="collapsed" desc="Finished for now">
-	private void select_cell (byte row, byte col) {
-		Rectangle rectangle = new Rectangle (55, 55, Color.TRANSPARENT);
-		rectangle.setStroke (Color.GREEN);
-		rectangle.setStrokeWidth (5);
-		grid[row][col].getChildren ().add (rectangle);
-		selectedRow = row;
-		selectedCol = col;
-		selected = true;
-	}
-	
-	private boolean valid_index (byte row, byte col) {
-		return row >= 0 && row<8 && col >= 0 && col<8;
-	}
-	
-	private void reset_validTo () {
-		for (int i = 0; i<8; i++) {
-			for (int j = 0; j<8; j++) {
-				valid_to[i][j] = NONE;
-			}
-		}
-	}
-	
-	
-	private boolean mate () {
-		for (byte i = 0; i<8; i++) {
-			for (byte j = 0; j<8; j++) {
-				if ((state[i][j] == next || state[i][j] == next+2) && set_valids (i, j)) {
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-	
-	private void changeNext(){
-		if (next == WHITE) {
-			next = BLACK;
-			turn_text.setText (blackName+" (Black)'s turn");
-		}
-		else if (next== BLACK) {
-			next = WHITE;
-			turn_text.setText (whiteName+" (White)'s turn");
-		}
-		if (mate () && (singlePlayer || this_player == next)) {
-			surrender ();
-		}
-	}
-	
-	private boolean set_valids (byte row, byte col) {
-		byte strt = 0, nd = 2, stt = state[row][col];//strt and nd by default (for white)
-		if (stt == WHITE_KING || stt == BLACK_KING) {
-			nd = 4;
-		}
-		else if (stt == BLACK) {
-			strt = 2;
-			nd = 4;
-		}
-		boolean flg_jmp = false, flg_mv = false;
-		for (byte i = strt; i<nd; i++) {
-			byte trgtrow = (byte) (row+dirrow[i]), trgtcol = (byte) (col+dircol[i]), trgtstt;
-			if (!valid_index (trgtrow, trgtcol)) {
-				continue;
-			}
-			trgtstt = state[trgtrow][trgtcol];
-			if (!jumpOnly && trgtstt == NONE) {
-				valid_to[trgtrow][trgtcol] = MOVE;
-				flg_mv = true;
-			}
-			else {
-				byte trgtrow2 = (byte) (trgtrow+dirrow[i]), trgtcol2 = (byte) (trgtcol+dircol[i]);
-				boolean vld_jmp = (valid_index (trgtrow2, trgtcol2) && state[trgtrow2][trgtcol2] == NONE);
-				if (vld_jmp) {
-					if ((stt == BLACK || stt == BLACK_KING) && (trgtstt == WHITE || trgtstt== WHITE_KING)) {
-						valid_to[trgtrow2][trgtcol2] = JUMP;
-						flg_jmp = true;
-					} else if ((stt == WHITE || stt == WHITE_KING) && (trgtstt == BLACK || trgtstt== BLACK_KING)) {
-						valid_to[trgtrow2][trgtcol2] = JUMP;
-						flg_jmp = true;
-					}
-				}
-			}
-		}
-		if (jumpOnly && !flg_jmp) {
-			jumpOnly = false;
-			changeNext ();
-		}
-		else if (jumpOnly) {
-			select_cell (selectedRow, selectedCol);
-		}
-		return flg_jmp || flg_mv;
-	}
-	
-	private void move (byte toRow, byte toCol) {
-		grid[selectedRow][selectedCol].getChildren ().remove (1, 3);
-		if (state[selectedRow][selectedCol] == WHITE && toRow == 0) {
-			state[selectedRow][selectedCol] = WHITE_KING;
-		} else if (state[selectedRow][selectedCol] == BLACK && toRow == 7) {
-			state[selectedRow][selectedCol] = BLACK_KING;
-		}
-		add_piece (toRow, toCol, state[selectedRow][selectedCol]);
-		state[toRow][toCol] = state[selectedRow][selectedCol];
-		state[selectedRow][selectedCol] = NONE;
-		selected = false;
-		if (Math.abs (toRow-selectedRow)>1) {
-			byte removeRow = (byte) ((selectedRow+toRow)/2), removeCol = (byte) ((selectedCol+toCol)/2);
-			grid[removeRow][removeCol].getChildren ().remove (1);
-			captureAnimation (removeRow, removeCol, state[removeRow][removeCol]);
-			state[removeRow][removeCol] = NONE;
-			if (next == WHITE) {
-				blackPieces--;
-				if (blackPieces == 0) {
-					changeNext ();
-//					finish ();
-				}
-			} else if (next == BLACK) {
-				whitePieces--;
-				if (whitePieces == 0) {
-					changeNext ();
-//					finish ();
-				}
-			}
-			reset_validTo ();
-			jumpOnly = true;
-			selectedRow = toRow;
-			selectedCol = toCol;
-			set_valids (toRow, toCol);
-		}
-		else {
-			changeNext ();
-		}
-	}
-	
-	private void click(byte _row, byte _col){
-		if (selected) {
-			if (valid_to[_row][_col] != NONE) {
-				move (_row, _col);
-			}
-			else if (state[_row][_col] == next || state[_row][_col] == next+2) {
-				grid[selectedRow][selectedCol].getChildren ().remove (2);
-				select_cell (_row, _col);
-				reset_validTo ();
-				set_valids (_row, _col);
-			}
-		}
-		else {
-			if (state[_row][_col] == next || state[_row][_col] == next+2) {
-				select_cell (_row, _col);
-				reset_validTo ();
-				set_valids (_row, _col);
-			}
-		}
-	}
-	//</editor-fold>
-	
 	@Override
 	public void start (Stage primaryStage) throws Exception {
-		//<editor-fold defaultstate="collapsed" desc="initializations">
-		checker_images[WHITE] = white_piece;
-		checker_images[BLACK] = black_piece;
-		checker_images[WHITE_KING] = white_king;
-		checker_images[BLACK_KING] = black_king;
-		next = WHITE;
 		game_window = primaryStage;
 		Parent root = FXMLLoader.load (getClass ().getResource ("mainscene.fxml"));
 		game_scene = new Scene (root);
-		turn_text = (Text) game_scene.lookup ("#turn");
-		name = (Text) game_scene.lookup("#name");
-		opponent = (Text) game_scene.lookup("#opponentName");
-		opponentTitle = (Text) game_scene.lookup("#opponentTitle");
-		nameTitle = (Text) game_scene.lookup("#nameTitle");
-		opponentTitle.setVisible(false);
-		nameTitle.setVisible(false);
-		name.setVisible (false);
-		opponent.setVisible (false);
-		turn_text.setText ("Waiting for opponent...");
-		checkerboard = (GridPane) game_scene.lookup ("#checkerBoard");
-		whitebox = (VBox) game_scene.lookup ("#whitebox");
-		blackbox = (VBox) game_scene.lookup ("#blackbox");
-		//</editor-fold>
 		for (byte col = 0; col<8; col++) {
 			for (byte row = 0; row<8; row++) {
 				final byte _col = col, _row = row;

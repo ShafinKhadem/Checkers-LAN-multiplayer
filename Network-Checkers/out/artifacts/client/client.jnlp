@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="client.jar" size="314600" download="eager" />
+    <jar href="client.jar" size="314477" download="eager" />
   </resources>
   <jfx:javafx-desc  width="600" height="400" main-class="mainGame.ClientMain"  name="client" />
   <update check="background"/>

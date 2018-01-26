@@ -5,7 +5,7 @@ Our term project of Level 1 term 2 Network checkers
 - [X] make basic game
 - [X] Process all the requests and make pairs from them
 - [X] Optional: Implement login system
-- [ ] Optional: show possible moves
+- [X] Optional: show possible moves
 
 # Useful links
 - https://www.coolmath-games.com/0-checkers

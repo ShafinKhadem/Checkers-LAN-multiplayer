@@ -17,16 +17,11 @@ public class LoginController {
 	
 	@FXML
 	void signIn(ActionEvent event) {
-		GameMain.playerName = user.getText ();
-		GameMain.passWord = password.getText ();
-		System.out.println ("Entered name: "+GameMain.playerName+" password: "+GameMain.passWord);
-		ClientMain.game.login ();
+		ClientMain.game.login (user.getText (), password.getText ());
 	}
 	
 	@FXML
 	void signUp (ActionEvent event) {
-		GameMain.playerName = user.getText ();
-		GameMain.passWord = password.getText ();
-		ClientMain.game.signup ();
+		ClientMain.game.signup (user.getText (), password.getText ());
 	}
 }
