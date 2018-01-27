@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -12,6 +13,7 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -363,18 +365,59 @@ public class GameMain extends Application {
 		dialog = new Stage();
 		FXMLLoader loader = new FXMLLoader (getClass ().getResource ("loginScene.fxml"));
 		try {
-			dialog.setScene (new Scene (loader.load ()));
+			//<editor-fold defaultstate="collapsed" desc="Making the window scaling">
+			Region contentRootRegion = loader.load();//if non-scaling window then Parent parent=loader.load()
+			//to access controller class's variable from outside: (this statement must be after loader.load())
+			LoginController controller = loader.getController ();
+			//Set a default "standard" or "100%" resolution
+			double origW = 600, origH = 400;
+			//If the Region containing the GUI does not already have a preferred width and height, set it.
+			//But, if it does, we can use that setting as the "standard" resolution.
+			if ( contentRootRegion.getPrefWidth() == Region.USE_COMPUTED_SIZE ) {
+				contentRootRegion.setPrefWidth( origW );
+			}
+			else {
+				origW = contentRootRegion.getPrefWidth();
+			}
+			if ( contentRootRegion.getPrefHeight() == Region.USE_COMPUTED_SIZE ) {
+				contentRootRegion.setPrefHeight( origH );
+			}
+			else {
+				origH = contentRootRegion.getPrefHeight();
+			}
+			//Wrap the resizable content in a non-resizable container (Group)
+			Group group = new Group( contentRootRegion );
+			//Place the Group in a StackPane, which will keep it centered
+			StackPane rootPane = new StackPane();
+			rootPane.getChildren().add(group);
+			dialog.setTitle( "Login" );
+			//Create the scene initally at the "100%" size
+			Scene scene = new Scene( rootPane, origW, origH );
+			//as rootPane is being used as scene root instead of parent, you have to lookup using rootPane.lookup()
+			//Bind the scene's width and height to the scaling parameters on the group
+			group.scaleXProperty().bind( scene.widthProperty().divide( origW ) );
+			group.scaleYProperty().bind( scene.heightProperty().divide( origH ) );
+			//next 4 lines make sure that aspect ratio is maintained
+			dialog.setMaxHeight (700);
+			dialog.setMaxWidth (700*origW/origH);
+			dialog.minHeightProperty ().bind (scene.widthProperty ().multiply (origH).divide (origW));
+			dialog.minWidthProperty ().bind (scene.heightProperty ().multiply (origW).divide (origH));
+			//</editor-fold>
+			
+			//to make button press using enter
+			controller.signinButton.defaultButtonProperty ().bind (controller.signinButton.focusedProperty ());
+			controller.signupButton.defaultButtonProperty ().bind (controller.signupButton.focusedProperty ());
+			
+			dialog.setScene (scene);
+			dialog.initModality(Modality.APPLICATION_MODAL);
+			dialog.initOwner(game_window);
+			dialog.setOnCloseRequest (event -> System.exit (1));
+			dialog.show();
+			//to make this text field selected by default
+			controller.user.requestFocus ();
 		} catch (IOException e) {
 			e.printStackTrace ();
 		}
-		LoginController controller = loader.getController ();
-		dialog.initModality(Modality.APPLICATION_MODAL);
-		dialog.initOwner(game_window);
-		dialog.setOnCloseRequest (event -> System.exit (1));
-		dialog.show();
-		controller.user.requestFocus ();
-		controller.signinButton.defaultButtonProperty ().bind (controller.signinButton.focusedProperty ());
-		controller.signupButton.defaultButtonProperty ().bind (controller.signupButton.focusedProperty ());
 	}
 	
 	void signup (String usr, String pswrd) {

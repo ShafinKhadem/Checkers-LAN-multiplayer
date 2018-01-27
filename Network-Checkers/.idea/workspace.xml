@@ -8,19 +8,9 @@
   <component name="ChangeListManager">
     <list default="true" id="017e0459-0c7d-411e-a4fe-b41c4534e4ef" name="Default" comment="animation imrpoved and bugs fixed">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/client/src/mainGame/ClientMain.java" afterPath="$PROJECT_DIR$/client/src/mainGame/ClientMain.java" />
-      <change beforePath="$PROJECT_DIR$/client/src/mainGame/GameController.java" afterPath="$PROJECT_DIR$/client/src/mainGame/GameController.java" />
       <change beforePath="$PROJECT_DIR$/client/src/mainGame/GameMain.java" afterPath="$PROJECT_DIR$/client/src/mainGame/GameMain.java" />
-      <change beforePath="$PROJECT_DIR$/client/src/mainGame/LoginController.java" afterPath="$PROJECT_DIR$/client/src/mainGame/LoginController.java" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/client/client.jar" afterPath="$PROJECT_DIR$/out/artifacts/client/client.jar" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/client/client.jnlp" afterPath="$PROJECT_DIR$/out/artifacts/client/client.jnlp" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/server/server.jar" afterPath="$PROJECT_DIR$/out/artifacts/server/server.jar" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/server/server.jnlp" afterPath="$PROJECT_DIR$/out/artifacts/server/server.jnlp" />
-      <change beforePath="$PROJECT_DIR$/out/production/client/mainGame/ClientMain.class" afterPath="$PROJECT_DIR$/out/production/client/mainGame/ClientMain.class" />
-      <change beforePath="$PROJECT_DIR$/out/production/client/mainGame/GameController.class" afterPath="$PROJECT_DIR$/out/production/client/mainGame/GameController.class" />
+      <change beforePath="$PROJECT_DIR$/client/src/mainGame/loginScene.fxml" afterPath="$PROJECT_DIR$/client/src/mainGame/loginScene.fxml" />
       <change beforePath="$PROJECT_DIR$/out/production/client/mainGame/GameMain.class" afterPath="$PROJECT_DIR$/out/production/client/mainGame/GameMain.class" />
-      <change beforePath="$PROJECT_DIR$/out/production/client/mainGame/LoginController.class" afterPath="$PROJECT_DIR$/out/production/client/mainGame/LoginController.class" />
-      <change beforePath="$PROJECT_DIR$/../README.md" afterPath="$PROJECT_DIR$/../README.md" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -50,7 +40,7 @@
       <file leaf-file-name="Server.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/src/CheckersServer/Server.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
+            <state relative-caret-position="1890">
               <caret line="110" column="88" lean-forward="false" selection-start-line="110" selection-start-column="88" selection-end-line="110" selection-end-column="88" />
               <folding>
                 <element signature="docComment;class#Server#0" expanded="false" />
@@ -62,14 +52,15 @@
       <file leaf-file-name="GameMain.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/client/src/mainGame/GameMain.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="366" column="33" lean-forward="true" selection-start-line="366" selection-start-column="33" selection-end-line="366" selection-end-column="33" />
+            <state relative-caret-position="167">
+              <caret line="409" column="12" lean-forward="true" selection-start-line="409" selection-start-column="12" selection-end-line="409" selection-end-column="12" />
               <folding>
                 <element signature="docComment;class#GameMain#0" expanded="false" />
-                <element signature="e#2789#2790#0" expanded="true" />
-                <element signature="e#2815#2816#0" expanded="true" />
-                <element signature="e#4216#4217#0" expanded="true" />
-                <element signature="e#4296#4297#0" expanded="true" />
+                <element signature="e#2851#2852#0" expanded="true" />
+                <element signature="e#2877#2878#0" expanded="true" />
+                <element signature="e#4278#4279#0" expanded="true" />
+                <element signature="e#4358#4359#0" expanded="true" />
+                <element signature="e#4381#4444#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -87,7 +78,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>checker_images[state</find>
       <find>captureAnima</find>
       <find>start</find>
       <find>white'</find>
@@ -117,6 +107,7 @@
       <find>valid_inde</find>
       <find>remove</find>
       <find>showPossi</find>
+      <find>setRi</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -156,10 +147,9 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-1" />
-    <option name="y" value="-11" />
-    <option name="width" value="1368" />
-    <option name="height" value="780" />
+    <option name="y" value="-4" />
+    <option name="width" value="1366" />
+    <option name="height" value="772" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1">
@@ -176,7 +166,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="PackagesPane" />
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -188,14 +180,12 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scratches" />
       <pane id="Scope" />
-      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="settings.editor.selected.configurable" value="fileTemplates" />
-    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/Link to downloads/ChessHunt" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Downloads/Link to downloads/SingleScene" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -454,7 +444,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1" y="-11" width="1368" height="780" extended-state="6" />
+    <frame x="0" y="-4" width="1366" height="772" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -465,7 +455,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.12341772" sideWeight="0.50292826" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.11111111" sideWeight="0.49707174" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.0945946" sideWeight="0.49707174" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32882884" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -588,10 +578,11 @@
           <caret line="72" column="43" lean-forward="false" selection-start-line="72" selection-start-column="43" selection-end-line="72" selection-end-column="43" />
           <folding>
             <element signature="docComment;class#GameMain#0" expanded="false" />
-            <element signature="e#2789#2790#0" expanded="true" />
-            <element signature="e#2815#2816#0" expanded="true" />
-            <element signature="e#4216#4217#0" expanded="true" />
-            <element signature="e#4296#4297#0" expanded="true" />
+            <element signature="e#2851#2852#0" expanded="true" />
+            <element signature="e#2877#2878#0" expanded="true" />
+            <element signature="e#4278#4279#0" expanded="true" />
+            <element signature="e#4358#4359#0" expanded="true" />
+            <element signature="e#4381#4444#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -633,10 +624,11 @@
           <caret line="71" column="4" lean-forward="true" selection-start-line="71" selection-start-column="4" selection-end-line="71" selection-end-column="4" />
           <folding>
             <element signature="docComment;class#GameMain#0" expanded="false" />
-            <element signature="e#2789#2790#0" expanded="true" />
-            <element signature="e#2815#2816#0" expanded="true" />
-            <element signature="e#4216#4217#0" expanded="true" />
-            <element signature="e#4296#4297#0" expanded="true" />
+            <element signature="e#2851#2852#0" expanded="true" />
+            <element signature="e#2877#2878#0" expanded="true" />
+            <element signature="e#4278#4279#0" expanded="true" />
+            <element signature="e#4358#4359#0" expanded="true" />
+            <element signature="e#4381#4444#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -664,10 +656,11 @@
           <caret line="60" column="5" lean-forward="true" selection-start-line="60" selection-start-column="5" selection-end-line="60" selection-end-column="5" />
           <folding>
             <element signature="docComment;class#GameMain#0" expanded="false" />
-            <element signature="e#2789#2790#0" expanded="true" />
-            <element signature="e#2815#2816#0" expanded="true" />
-            <element signature="e#4216#4217#0" expanded="true" />
-            <element signature="e#4296#4297#0" expanded="true" />
+            <element signature="e#2851#2852#0" expanded="true" />
+            <element signature="e#2877#2878#0" expanded="true" />
+            <element signature="e#4278#4279#0" expanded="true" />
+            <element signature="e#4358#4359#0" expanded="true" />
+            <element signature="e#4381#4444#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -692,10 +685,11 @@
           <caret line="97" column="60" lean-forward="true" selection-start-line="97" selection-start-column="60" selection-end-line="97" selection-end-column="60" />
           <folding>
             <element signature="docComment;class#GameMain#0" expanded="false" />
-            <element signature="e#2789#2790#0" expanded="true" />
-            <element signature="e#2815#2816#0" expanded="true" />
-            <element signature="e#4216#4217#0" expanded="true" />
-            <element signature="e#4296#4297#0" expanded="true" />
+            <element signature="e#2851#2852#0" expanded="true" />
+            <element signature="e#2877#2878#0" expanded="true" />
+            <element signature="e#4278#4279#0" expanded="true" />
+            <element signature="e#4358#4359#0" expanded="true" />
+            <element signature="e#4381#4444#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -904,7 +898,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/server/src/CheckersServer/Server.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
+        <state relative-caret-position="1890">
           <caret line="110" column="88" lean-forward="false" selection-start-line="110" selection-start-column="88" selection-end-line="110" selection-end-column="88" />
           <folding>
             <element signature="docComment;class#Server#0" expanded="false" />
@@ -914,14 +908,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/client/src/mainGame/GameMain.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="366" column="33" lean-forward="true" selection-start-line="366" selection-start-column="33" selection-end-line="366" selection-end-column="33" />
+        <state relative-caret-position="167">
+          <caret line="409" column="12" lean-forward="true" selection-start-line="409" selection-start-column="12" selection-end-line="409" selection-end-column="12" />
           <folding>
             <element signature="docComment;class#GameMain#0" expanded="false" />
-            <element signature="e#2789#2790#0" expanded="true" />
-            <element signature="e#2815#2816#0" expanded="true" />
-            <element signature="e#4216#4217#0" expanded="true" />
-            <element signature="e#4296#4297#0" expanded="true" />
+            <element signature="e#2851#2852#0" expanded="true" />
+            <element signature="e#2877#2878#0" expanded="true" />
+            <element signature="e#4278#4279#0" expanded="true" />
+            <element signature="e#4358#4359#0" expanded="true" />
+            <element signature="e#4381#4444#0" expanded="true" />
           </folding>
         </state>
       </provider>
