@@ -2,13 +2,13 @@
 A LAN multiplayer checkers game with a multi-threaded server, implemented using Java sockets and JavaFX. Done as term project for CSE-108 Object Oriented Programming sessional of BUET.
 
 # gameplay
-https://github.com/ShafinKhadem/Checkers-LAN-multiplayer/blob/master/gameplay.mp4
+
+
+https://user-images.githubusercontent.com/26321479/148648979-97cc017c-c07c-4c46-9bdc-406b506addd9.mp4
+
+
 
 # Screenshots of game
-
-![Game-flow](screenshots/ss1.png?raw=true "Game-flow")
-
-<p align="center">Game-flow</p>
 
 ![Sign in, sign up and waiting for opponent](screenshots/ss2.png?raw=true "Sign in, sign up and waiting for opponent")
 
@@ -16,7 +16,7 @@ https://github.com/ShafinKhadem/Checkers-LAN-multiplayer/blob/master/gameplay.mp
 
 ![Help, surrender and track record options](screenshots/ss3.png?raw=true "Help, surrender and track record options")
 
-<p align="center">Help, surrender and track record options</p>
+<p align="center">Help, surrender and track record</p>
 
 
 # Key features
